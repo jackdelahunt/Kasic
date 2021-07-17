@@ -23,7 +23,13 @@ namespace kasic.Parsing
             var commands = new List<Command>();
             foreach (var token in Tokens)
             {
-                var command = CommandRegister.FindCommand(token.Name);
+                var registerResult = CommandRegister.FindCommand(token.Name);
+                if (registerResult.IsError)
+                {
+                    return Helpers.Error(registerResult.Error);
+                }
+
+                var command = registerResult.Value;
                 command.PassData(token.Args, token.Flags);
                 commands.Add(command);
             }

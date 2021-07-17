@@ -17,10 +17,16 @@ namespace kasic
             {
                 Console.Write(">>> ");
                 string input = Console.ReadLine().Trim();
+                
                 var lexer = new Lexer(input);
-                var tokens = lexer.Lex();
-
-                var parser = new Parser(tokens);
+                var lexerResult = lexer.Lex();
+                if (lexerResult.IsError)
+                {
+                    Logger.LogError(lexerResult.Error);
+                    continue;
+                }
+                
+                var parser = new Parser(lexerResult.Value);
                 var parserResult = parser.Parse();
                 if (parserResult.IsError)
                 {

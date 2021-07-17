@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using kasic.Logging;
+using OperationResult;
 
 namespace kasic.Lexing
 {
@@ -13,7 +15,7 @@ namespace kasic.Lexing
             Input = input;
         }
 
-        public List<CommandToken> Lex()
+        public Result<List<CommandToken>, KasicError> Lex()
         {
             var splits = Input.Split(" | ");
             var commandTokens = new List<CommandToken>();

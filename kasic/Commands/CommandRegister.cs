@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using kasic.Logging;
+using OperationResult;
 
 namespace kasic.Commands
 {
@@ -14,11 +16,22 @@ namespace kasic.Commands
             RegisterCommand(new Num());
         }
         
-        public static Command FindCommand(string name)
+        public static Result<Command, KasicError> FindCommand(string name)
         {
             commands.TryGetValue(name, out var command);
-            var type = command.GetType();
-            return Activator.CreateInstance(type) as Command;
+            var type = command?.GetType();
+
+            if (type == null)
+            {
+                return Helpers.Error(new KasicError
+                {
+                    Command = null,
+                    Region = KasicRegion.PARSER,
+                    Message = $"Cannot find command with the name: {name}"
+                });
+            }
+
+            return Helpers.Ok(Activator.CreateInstance(type) as Command);
         }
 
         private static void RegisterCommand(Command command)

@@ -24,7 +24,7 @@ namespace kasic.Logging
                 case KasicRegion.PARSER: region = "PARSER"; break;
                 default: region = "RUNTIME"; break;
             }
-            Logln($"{region} ERROR: {error.Message}; with {error.Command}");
+            Logln($"{region} ERROR: {error.Message}; {error.Command}");
         }
     }
 
