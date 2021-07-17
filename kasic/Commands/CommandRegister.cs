@@ -14,6 +14,8 @@ namespace kasic.Commands
             commands = new Dictionary<string, Command>();
             RegisterCommand(new Add());
             RegisterCommand(new Num());
+            RegisterCommand(new Clear());
+            RegisterCommand(new Exit());
         }
         
         public static Result<Command, KasicError> FindCommand(string name)
