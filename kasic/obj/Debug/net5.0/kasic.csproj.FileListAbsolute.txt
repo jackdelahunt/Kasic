@@ -1,0 +1,16 @@
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/kasic
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/kasic.deps.json
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/kasic.runtimeconfig.json
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/kasic.runtimeconfig.dev.json
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/kasic.dll
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/ref/kasic.dll
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/kasic.pdb
+/home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.csprojAssemblyReference.cache
+/home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.GeneratedMSBuildEditorConfig.editorconfig
+/home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.AssemblyInfoInputs.cache
+/home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.AssemblyInfo.cs
+/home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.csproj.CoreCompileInputs.cache
+/home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.dll
+/home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/ref/kasic.dll
+/home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.pdb
+/home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.genruntimeconfig.cache
