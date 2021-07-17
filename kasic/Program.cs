@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using kasic.Commands;
 using kasic.Lexing;
+using kasic.Logging;
 using kasic.Parsing;
+using OperationResult;
 
 namespace kasic
 {
@@ -19,9 +21,14 @@ namespace kasic
                 var tokens = lexer.Lex();
 
                 var parser = new Parser(tokens);
-                var commands = parser.Parse();
+                var parserResult = parser.Parse();
+                if (parserResult.IsError)
+                {
+                    Logger.LogError(parserResult.Error);
+                    continue;
+                }
 
-                var runtime = new Runtime(commands);
+                var runtime = new Runtime(parserResult.Value);
                 runtime.Run();
             }
         }

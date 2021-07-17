@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using kasic.Commands;
 using kasic.Lexing;
+using kasic.Logging;
+using OperationResult;
+using OperationResult.Tags;
 
 namespace kasic.Parsing
 {
@@ -15,7 +18,7 @@ namespace kasic.Parsing
             Tokens = tokens;
         }
 
-        public List<Command> Parse()
+        public Result<List<Command>, KasicError> Parse()
         {
             var commands = new List<Command>();
             foreach (var token in Tokens)
@@ -30,48 +33,84 @@ namespace kasic.Parsing
                 var command = commands[i];
                 if (i == 0)
                 {
-                    ParseFirst(command);
+                    var status = ParseFirst(command);
+                    if (status.IsError)
+                    {
+                        return Helpers.Error(status.Error);
+                    }
                     continue;
                 }
                 
                 // command always has one before here
                 var beforeCommand = commands[i - 1];
-                ParseCommand(beforeCommand, command);
+                var parseCommandStatus = ParseCommand(beforeCommand, command);
+                if (parseCommandStatus.IsError)
+                {
+                    return Helpers.Error(parseCommandStatus.Error);
+                }
             }
 
             return commands;
         }
 
-        private void ParseCommand(Command before, Command next)
+        private Status<KasicError> ParseCommand(Command before, Command next)
         {
             if (before.CommandSettings().ReturnType == KasicType.VOID ||
                 next.CommandSettings().FieldType == KasicType.VOID)
             {
-                throw new Exception("command has a return of void or takes a void");
+                return Helpers.Error(
+                    new KasicError
+                    {
+                        Region = KasicRegion.PARSER,
+                        Command = next,
+                        Message = "Cannot chain commands that return or require VOID",
+                    });
             }
             
             // TODO: add a any type check here
             if (before.CommandSettings().ReturnType != next.CommandSettings().FieldType)
             {
-                throw new Exception("return type and input type mismatch");
+                return Helpers.Error(
+                    new KasicError
+                    {
+                        Region = KasicRegion.PARSER,
+                        Command = next,
+                        Message = $"Type mismatch got {before.CommandSettings().ReturnType} but expected {next.CommandSettings().FieldType}",
+                    });
             }
 
             int nextTotalArgAmount = next.Args().Count + 1;
             if (nextTotalArgAmount > next.CommandSettings().MaxArgs ||
                 nextTotalArgAmount < next.CommandSettings().MinArgs)
             {
-                throw new Exception("arg count mismatch");
+                return Helpers.Error(
+                    new KasicError
+                    {
+                        Region = KasicRegion.PARSER,
+                        Command = next,
+                        Message = "Arg count mismatch",
+                    });
             }
+
+            return Helpers.Ok();
         }
 
-        private void ParseFirst(Command command)
+        private Status<KasicError> ParseFirst(Command command)
         {
             int argCount = command.Args().Count;
             if (argCount > command.CommandSettings().MaxArgs ||
                 argCount < command.CommandSettings().MinArgs)
             {
-                throw new Exception("first command needs to populate its values");
+                return Helpers.Error(
+                    new KasicError
+                    {
+                        Region = KasicRegion.PARSER,
+                        Command = command,
+                        Message = "Arg count mismatch",
+                    });
             }
+
+            return Helpers.Ok();
         }
     }
 }

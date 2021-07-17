@@ -14,3 +14,5 @@
 /home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/ref/kasic.dll
 /home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.pdb
 /home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.genruntimeconfig.cache
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/CSharp.OperationResult.dll
+/home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.csproj.CopyComplete

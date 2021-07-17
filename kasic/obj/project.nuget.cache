@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "b3NHpVRbUgUppYGZjeNjZaol2SrUw0fa+UYt4Zv5gn35YwHSezr+MaJvBrpj59/8/yV9ho8tV7qzcn36GuDxUg==",
+  "dgSpecHash": "oc2jJtv/ANlu0uGTKpAYXcE1T/WbxF8lmz5cD5c5G+0Z8msJTVUzqxPM/qj3c6yrQ5hANUZjjU/UdOU4zmyGtw==",
   "success": true,
   "projectFilePath": "/home/jackdelahunt/Projects/kasic/kasic/kasic.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/home/jackdelahunt/.nuget/packages/csharp.operationresult/0.1.6/csharp.operationresult.0.1.6.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -1,11 +1,36 @@
 {
   "version": 3,
   "targets": {
-    "net5.0": {}
+    "net5.0": {
+      "CSharp.OperationResult/0.1.6": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/CSharp.OperationResult.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/CSharp.OperationResult.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "CSharp.OperationResult/0.1.6": {
+      "sha512": "nTfJ8UQTlZvqCTxN8a6KFNpRxY3vyK2rYEtFz6l8s+DRdgbGbqtYfLeqBQjt9UN4ma1y8yB/lA0n5qkSUlYsmg==",
+      "type": "package",
+      "path": "csharp.operationresult/0.1.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "csharp.operationresult.0.1.6.nupkg.sha512",
+        "csharp.operationresult.nuspec",
+        "lib/netstandard2.0/CSharp.OperationResult.dll"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    "net5.0": []
+    "net5.0": [
+      "CSharp.OperationResult >= 0.1.6"
+    ]
   },
   "packageFolders": {
     "/home/jackdelahunt/.nuget/packages/": {}
@@ -43,6 +68,12 @@
     "frameworks": {
       "net5.0": {
         "targetAlias": "net5.0",
+        "dependencies": {
+          "CSharp.OperationResult": {
+            "target": "Package",
+            "version": "[0.1.6, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
