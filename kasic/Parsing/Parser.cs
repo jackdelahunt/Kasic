@@ -30,7 +30,8 @@ namespace kasic.Parsing
                 }
 
                 var command = registerResult.Value;
-                command.PassData(token.Args, token.Flags);
+                command.Args = token.Args;
+                command.Flags = token.Flags;
                 commands.Add(command);
             }
 
@@ -61,8 +62,8 @@ namespace kasic.Parsing
 
         private Status<KasicError> ParseCommand(Command before, Command next)
         {
-            if (before.CommandSettings().ReturnType == KasicType.VOID ||
-                next.CommandSettings().FieldType == KasicType.VOID)
+            if (before.CommandSettings.ReturnType == KasicType.VOID ||
+                next.CommandSettings.FieldType == KasicType.VOID)
             {
                 return Helpers.Error(
                     new KasicError
@@ -74,20 +75,20 @@ namespace kasic.Parsing
             }
             
             // TODO: add a any type check here
-            if (before.CommandSettings().ReturnType != next.CommandSettings().FieldType)
+            if (before.CommandSettings.ReturnType != next.CommandSettings.FieldType)
             {
                 return Helpers.Error(
                     new KasicError
                     {
                         Region = KasicRegion.PARSER,
                         Command = next,
-                        Message = $"Type mismatch got {before.CommandSettings().ReturnType} but expected {next.CommandSettings().FieldType}",
+                        Message = $"Type mismatch got {before.CommandSettings.ReturnType} but expected {next.CommandSettings.FieldType}",
                     });
             }
 
-            int nextTotalArgAmount = next.Args().Count + 1;
-            if (nextTotalArgAmount > next.CommandSettings().MaxArgs ||
-                nextTotalArgAmount < next.CommandSettings().MinArgs)
+            int nextTotalArgAmount = next.Args.Count + 1;
+            if (nextTotalArgAmount > next.CommandSettings.MaxArgs ||
+                nextTotalArgAmount < next.CommandSettings.MinArgs)
             {
                 return Helpers.Error(
                     new KasicError
@@ -103,9 +104,9 @@ namespace kasic.Parsing
 
         private Status<KasicError> ParseFirst(Command command)
         {
-            int argCount = command.Args().Count;
-            if (argCount > command.CommandSettings().MaxArgs ||
-                argCount < command.CommandSettings().MinArgs)
+            int argCount = command.Args.Count;
+            if (argCount > command.CommandSettings.MaxArgs ||
+                argCount < command.CommandSettings.MinArgs)
             {
                 return Helpers.Error(
                     new KasicError

@@ -8,15 +8,9 @@ namespace kasic.Commands
 {
     public class Num : Command
     {
-        public List<string> Args { get; private set; }
-        public List<string> Flags { get; private set; }
-        private CommandSettings commandSettings;
-
-        public Num()
+        public Num() : base("num")
         {
-            Args = new List<string>();
-            Flags = new List<string>();
-            commandSettings = new CommandSettings()
+            CommandSettings = new CommandSettings()
             {
                 MinArgs = 1,
                 MaxArgs = 1,
@@ -26,7 +20,7 @@ namespace kasic.Commands
             };
         }
 
-        public Result<string, KasicError> Run()
+        public override Result<string, KasicError> Run()
         {
             var result = Types.ToNumber(Args[0]);
             if (result.IsError)
@@ -35,37 +29,6 @@ namespace kasic.Commands
             }
             
             return Args[0];
-        }
-
-        public void PassData(List<string> args, List<string> flags)
-        {
-            Args = args;
-            Flags = args;
-        }
-
-        public void AddArg(string arg)
-        {
-            Args.Add(arg);
-        }
-
-        public string Name()
-        {
-            return "num";
-        }
-
-        List<string> Command.Args()
-        {
-            return Args;
-        }
-
-        List<string> Command.Flags()
-        {
-            return Flags;
-        }
-
-        public CommandSettings CommandSettings()
-        {
-            return this.commandSettings;
         }
     }
 }

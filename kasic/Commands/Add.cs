@@ -8,15 +8,9 @@ namespace kasic.Commands
 {
     public class Add : Command
     {
-        public List<string> Args { get; private set; }
-        public List<string> Flags { get; private set; }
-        private CommandSettings commandSettings;
-
-        public Add()
+        public Add() : base("add")
         {
-            Args = new List<string>();
-            Flags = new List<string>();
-            commandSettings = new CommandSettings()
+            CommandSettings = new CommandSettings()
             {
                 MinArgs = 2,
                 MaxArgs = UInt32.MaxValue,
@@ -26,7 +20,7 @@ namespace kasic.Commands
             };
         }
 
-        public Result<string, KasicError> Run()
+        public override Result<string, KasicError> Run()
         {
             double total = 0;
             foreach (var arg in Args)
@@ -41,37 +35,6 @@ namespace kasic.Commands
             }
 
             return Helpers.Ok(total.ToString());
-        }
-
-        public void PassData(List<string> args, List<string> flags)
-        {
-            Args = args;
-            Flags = args;
-        }
-
-        public void AddArg(string arg)
-        {
-            Args.Add(arg);
-        }
-
-        public string Name()
-        {
-            return "add";
-        }
-
-        List<string> Command.Args()
-        {
-            return Args;
-        }
-
-        List<string> Command.Flags()
-        {
-            return Flags;
-        }
-
-        public CommandSettings CommandSettings()
-        {
-            return this.commandSettings;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace kasic
             {
                 if (lastOut != null)
                 {
-                    command.AddArg(lastOut);
+                    command.Args.Add(lastOut);
                 }
 
                 var result = command.Run();

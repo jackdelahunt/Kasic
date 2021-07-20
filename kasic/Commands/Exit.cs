@@ -1,21 +1,16 @@
 using System;
 using System.Collections.Generic;
 using kasic.Logging;
+using kasic.Utils;
 using OperationResult;
 
 namespace kasic.Commands
 {
     public class Exit : Command
     {
-        public List<string> Args { get; private set; }
-        public List<string> Flags { get; private set; }
-        private CommandSettings commandSettings;
-
-        public Exit()
+        public Exit() : base("exit")
         {
-            Args = new List<string>();
-            Flags = new List<string>();
-            commandSettings = new CommandSettings()
+            CommandSettings = new CommandSettings()
             {
                 MinArgs = 0,
                 MaxArgs = 0,
@@ -25,41 +20,10 @@ namespace kasic.Commands
             };
         }
 
-        public Result<string, KasicError> Run()
+        public override Result<string, KasicError> Run()
         {
             Environment.Exit(0);
             return Helpers.Ok("");
-        }
-
-        public void PassData(List<string> args, List<string> flags)
-        {
-            Args = args;
-            Flags = args;
-        }
-
-        public void AddArg(string arg)
-        {
-            Args.Add(arg);
-        }
-
-        public string Name()
-        {
-            return "exit";
-        }
-
-        List<string> Command.Args()
-        {
-            return Args;
-        }
-
-        List<string> Command.Flags()
-        {
-            return Flags;
-        }
-
-        public CommandSettings CommandSettings()
-        {
-            return this.commandSettings;
         }
     }
 }

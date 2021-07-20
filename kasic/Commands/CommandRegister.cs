@@ -39,7 +39,7 @@ namespace kasic.Commands
 
         private static void RegisterCommand(Command command)
         {
-            commands.Add(command.Name(), command);
+            commands.Add(command.Name, command);
         }
     }
 }

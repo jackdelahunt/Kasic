@@ -1,18 +1,28 @@
+using System;
 using System.Collections.Generic;
 using kasic.Logging;
 using OperationResult;
 
 namespace kasic.Commands
 {
-    public interface Command
-    { 
-        Result<string, KasicError> Run();
-        public void PassData(List<string> args, List<string> flags);
-        public void AddArg(string arg);
-        string Name();
-        List<string> Args();
-        List<string> Flags();
-        public CommandSettings CommandSettings();
+    public abstract class Command
+    {
+        public string Name;
+        public List<string> Args;
+        public List<string> Flags;
+        public CommandSettings CommandSettings;
+
+        public Command(string name)
+        {
+            this.Name = name;
+            Args = new List<string>();
+            Flags = new List<string>();
+        }
+        
+        public virtual Result<string, KasicError> Run()
+        {
+            throw new NotImplementedException("Command command is not valid");
+        }
     }
 
     public enum KasicType
