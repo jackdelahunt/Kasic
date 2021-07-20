@@ -28,6 +28,8 @@ namespace kasic.Logging
             };
 
             StringBuilder builder = new StringBuilder();
+            
+            builder.Append($"[{error.Line}] ");
             if (region != "")
             {
                 builder.Append($"{region} ");
@@ -42,7 +44,7 @@ namespace kasic.Logging
             {
                 builder.Append($"{error.Command.ToString()}");
             }
-            
+
             Logln(builder.ToString());
         }
     }
@@ -52,6 +54,7 @@ namespace kasic.Logging
         public string Message;
         public Command Command;
         public KasicRegion Region;
+        public int Line;
     }
 
     public enum KasicRegion

@@ -14,7 +14,7 @@ namespace kasic.Utils
                 var number = Double.Parse(text);
                 return Helpers.Ok(number);
             }
-            catch (Exception e)
+            catch
             {
                 return Helpers.Error(new KasicError
                 {
