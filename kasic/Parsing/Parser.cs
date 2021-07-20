@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using kasic.Commands;
 using kasic.Lexing;
 using kasic.Logging;
+using kasic.Memory;
 using OperationResult;
 using OperationResult.Tags;
 
@@ -54,6 +55,15 @@ namespace kasic.Parsing
                 if (parseCommandStatus.IsError)
                 {
                     return Helpers.Error(parseCommandStatus.Error);
+                }
+            }
+
+            foreach (var command in commands)
+            {
+                var result = FillReferences(command);
+                if (result.IsError)
+                {
+                    return Helpers.Error(result.Error);
                 }
             }
 
@@ -115,6 +125,26 @@ namespace kasic.Parsing
                         Command = command,
                         Message = "Arg count mismatch",
                     });
+            }
+
+            return Helpers.Ok();
+        }
+
+        private Status<KasicError> FillReferences(Command command)
+        {
+            for (int i = 0; i < command.Args.Count; i++)
+            {
+                var arg = command.Args[i];
+                if (arg.StartsWith("*"))
+                {
+                    var result = Heap.Reference(arg.Substring(1));
+                    if (result.IsError)
+                    {
+                        return Helpers.Error(result.Error);
+                    }
+
+                    command.Args[i] = result.Value;
+                }
             }
 
             return Helpers.Ok();

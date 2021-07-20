@@ -9,75 +9,32 @@ namespace kasic.Memory
 {
     public static class Heap
     {
-        private static Dictionary<Tuple<string, KasicType>, string> heap =
-            new Dictionary<Tuple<string, KasicType>, string>();
+        private static Dictionary<string, string> heap = new Dictionary<string, string>();
 
-        public static Status<KasicError> SetNumber(string name, double data)
+        public static Status<KasicError> Push(string name, string data)
         {
-            var key = new Tuple<string, KasicType>(name, KasicType.NUMBER);
-            if (heap.ContainsKey(key))
+            if (heap.ContainsKey(name))
             {
                 // TODO: this looks dumb
-                heap.Remove(key);
+                heap.Remove(name);
             }
 
-            heap.Add(key, data.ToString());
+            heap.Add(name, data);
             return Helpers.Ok();
         }
         
-        public static Status<KasicError> SetString(string name, string data)
+        public static Result<string, KasicError> Reference(string name)
         {
-            var key = new Tuple<string, KasicType>(name, KasicType.STRING);
-            if (heap.ContainsKey(key))
-            {
-                // TODO: this looks dumb
-                heap.Remove(key);
-            }
-
-            heap.Add(key, data);
-            return Helpers.Ok();
-        }
-        
-        public static Result<double, KasicError> GetNumber(string name)
-        {
-            var key = new Tuple<string, KasicType>(name, KasicType.NUMBER);
-            if (!heap.ContainsKey(key))
+            if (!heap.ContainsKey(name))
             {
                 return Helpers.Error(new KasicError
                 {
-                    Message = $"Field {name} of type NUMBER is not set",
+                    Message = $"Field {name} is not set",
                     Region = KasicRegion.HEAP
                 });
             }
 
-            heap.TryGetValue(key, out var data);
-            var result = Types.ToNumber(data);
-
-            if (result.IsError)
-            {
-                return Helpers.Error(new KasicError
-                {
-                    Message = $"Field {name} cannot be inferred as a NUMBER -> {data}",
-                    Region = KasicRegion.HEAP
-                });
-            }
-            
-            return Helpers.Ok(result.Value);
-        }
-        
-        public static Result<string, KasicError> GetString(string name)
-        {
-            var key = new Tuple<string, KasicType>(name, KasicType.STRING);
-            if (!heap.ContainsKey(key))
-            {
-                return Helpers.Error(new KasicError
-                {
-                    Message = $"Field {name} of type STRING is not set",
-                    Region = KasicRegion.HEAP
-                });
-            }
-
-            heap.TryGetValue(key, out var data);
+            heap.TryGetValue(name, out var data);
             return Helpers.Ok(data);
         }
     }
