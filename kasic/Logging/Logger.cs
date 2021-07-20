@@ -59,5 +59,6 @@ namespace kasic.Logging
         LEXER,
         PARSER,
         RUNTIME,
+        HEAP,
     }
 }
