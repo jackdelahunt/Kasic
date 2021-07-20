@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using kasic.Commands;
 
 namespace kasic.Logging
@@ -22,9 +23,27 @@ namespace kasic.Logging
             {
                 case KasicRegion.LEXER: region = "LEXER"; break;
                 case KasicRegion.PARSER: region = "PARSER"; break;
-                default: region = "RUNTIME"; break;
+                case KasicRegion.RUNTIME: region = "RUNTIME"; break;
+                default: region = ""; break;
             }
-            Logln($"{region} ERROR: {error.Message}; {error.Command.ToString()}");
+
+            StringBuilder builder = new StringBuilder();
+            if (region != "")
+            {
+                builder.Append($"{region} ");
+            }
+            
+            if (error.Message != null)
+            {
+                builder.Append($"ERROR: {error.Message}; ");
+            }
+            
+            if (error.Command != null)
+            {
+                builder.Append($"{error.Command.ToString()}");
+            }
+            
+            Logln(builder.ToString());
         }
     }
 
