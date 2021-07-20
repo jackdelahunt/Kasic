@@ -18,14 +18,13 @@ namespace kasic.Logging
         
         public static void LogError(KasicError error)
         {
-            string region;
-            switch (error.Region)
+            string region = error.Region switch
             {
-                case KasicRegion.LEXER: region = "LEXER"; break;
-                case KasicRegion.PARSER: region = "PARSER"; break;
-                case KasicRegion.RUNTIME: region = "RUNTIME"; break;
-                default: region = ""; break;
-            }
+                KasicRegion.LEXER => "LEXER",
+                KasicRegion.PARSER => "PARSER",
+                KasicRegion.RUNTIME => "RUNTIME",
+                _ => ""
+            };
 
             StringBuilder builder = new StringBuilder();
             if (region != "")
@@ -56,6 +55,7 @@ namespace kasic.Logging
 
     public enum KasicRegion
     {
+        UNKNOWN = -1,
         LEXER,
         PARSER,
         RUNTIME,

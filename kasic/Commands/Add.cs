@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using kasic.Logging;
+using kasic.Utils;
+using OperationResult;
 
 namespace kasic.Commands
 {
@@ -23,15 +26,21 @@ namespace kasic.Commands
             };
         }
 
-        public string Run()
+        public Result<string, KasicError> Run()
         {
             double total = 0;
             foreach (var arg in Args)
             {
-                total += Double.Parse(arg);
+                var result = Types.ToNumber(arg);
+                if (result.IsError)
+                {
+                    return Helpers.Error(result.Error);
+                }
+
+                total += result.Value;
             }
 
-            return total.ToString();
+            return Helpers.Ok(total.ToString());
         }
 
         public void PassData(List<string> args, List<string> flags)

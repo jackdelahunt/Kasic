@@ -35,7 +35,12 @@ namespace kasic
                 }
 
                 var runtime = new Runtime(parserResult.Value);
-                runtime.Run();
+                var runtimeResult = runtime.Run();
+                if (runtimeResult.IsError)
+                {
+                    Logger.LogError(runtimeResult.Error);
+                    continue;
+                }
             }
         }
     }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using kasic.Commands;
+using kasic.Logging;
+using OperationResult;
 
 namespace kasic
 {
@@ -14,7 +16,7 @@ namespace kasic
             Commands = commands;
         }
 
-        public void Run()
+        public Status<KasicError> Run()
         {
             string lastOut = null;
             foreach (var command in Commands)
@@ -24,9 +26,16 @@ namespace kasic
                     command.AddArg(lastOut);
                 }
 
-                lastOut = command.Run();
+                var result = command.Run();
+                if (result.IsError)
+                {
+                    return Helpers.Error(result.Error);
+                }
+
+                lastOut = result.Value;
             }
             Console.WriteLine(lastOut);
+            return Helpers.Ok();
         }
         
         

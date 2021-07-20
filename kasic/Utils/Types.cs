@@ -18,7 +18,8 @@ namespace kasic.Utils
             {
                 return Helpers.Error(new KasicError
                 {
-                    Message = $"Cannot Convert {text} to a number",
+                    Message = $"Cannot convert {text} to a number",
+                    Region = KasicRegion.UNKNOWN
                 });
             }
         }

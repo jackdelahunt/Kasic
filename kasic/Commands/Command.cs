@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using kasic.Logging;
+using OperationResult;
 
 namespace kasic.Commands
 {
     public interface Command
     { 
-        string Run();
+        Result<string, KasicError> Run();
         public void PassData(List<string> args, List<string> flags);
         public void AddArg(string arg);
         string Name();

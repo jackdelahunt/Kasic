@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using kasic.Logging;
+using OperationResult;
 
 namespace kasic.Commands
 {
@@ -23,10 +25,10 @@ namespace kasic.Commands
             };
         }
 
-        public string Run()
+        public Result<string, KasicError> Run()
         {
             Console.Clear();
-            return "";
+            return Helpers.Ok("");
         }
 
         public void PassData(List<string> args, List<string> flags)

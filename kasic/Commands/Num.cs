@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using kasic.Logging;
+using kasic.Utils;
+using OperationResult;
 
 namespace kasic.Commands
 {
@@ -23,9 +26,14 @@ namespace kasic.Commands
             };
         }
 
-        public string Run()
+        public Result<string, KasicError> Run()
         {
-            // check if it is a number
+            var result = Types.ToNumber(Args[0]);
+            if (result.IsError)
+            {
+                return Helpers.Error(result.Error);
+            }
+            
             return Args[0];
         }
 
