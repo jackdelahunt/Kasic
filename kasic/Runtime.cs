@@ -34,7 +34,6 @@ namespace kasic
 
                 lastOut = result.Value;
             }
-            Console.WriteLine(lastOut);
             return Helpers.Ok();
         }
         
