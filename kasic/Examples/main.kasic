@@ -1,22 +1,17 @@
 set prompt The_current_number_is:
 set number 0
 
-print *prompt
 num *number | add 1 | set number
-print *number
+print *prompt *number
 
-print *prompt
 num *number | add 1 | set number
-print *number
+print *prompt *number
 
-print *prompt
 num *number | add 1 | set number
-print *number
+print *prompt *number
 
-print *prompt
 num *number | add 1 | set number
-print *number
+print *prompt *number
 
-print *prompt
 num *number | add 1 | set number
-print *number
+print *prompt *number

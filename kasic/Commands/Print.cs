@@ -13,7 +13,7 @@ namespace kasic.Commands
             CommandSettings = new CommandSettings()
             {
                 MinArgs = 1,
-                MaxArgs = 1,
+                MaxArgs = UInt32.MaxValue,
                 FieldType = KasicType.ANY,
                 ReturnType = KasicType.VOID,
                 DefinedFields = null,
@@ -22,7 +22,22 @@ namespace kasic.Commands
 
         public override Result<string, KasicError> Run()
         {
-            Console.WriteLine(Args[0]);
+            Logger.Logln("");
+            if (Flags.Contains("-c"))
+            {
+                foreach (var arg in Args)
+                {
+                    Logger.Log(arg);
+                }
+            }
+            else
+            {
+                foreach (var arg in Args)
+                {
+                    Logger.Log(arg + " ");
+                } 
+            }
+
             return Helpers.Ok("");
         }
     }
