@@ -14,7 +14,7 @@ namespace kasic.Commands
             {
                 MinArgs = 1,
                 MaxArgs = 1,
-                FieldType = KasicType.STRING,
+                FieldType = KasicType.ANY,
                 ReturnType = KasicType.STRING,
                 DefinedFields = null,
             };

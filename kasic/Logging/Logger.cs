@@ -23,6 +23,7 @@ namespace kasic.Logging
                 KasicRegion.LEXER => "LEXER",
                 KasicRegion.PARSER => "PARSER",
                 KasicRegion.RUNTIME => "RUNTIME",
+                KasicRegion.HEAP => "HEAP",
                 _ => ""
             };
 

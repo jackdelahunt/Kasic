@@ -83,9 +83,8 @@ namespace kasic.Parsing
                         Message = "Cannot chain commands that return or require VOID",
                     });
             }
-            
-            // TODO: add a any type check here
-            if (before.CommandSettings.ReturnType != next.CommandSettings.FieldType)
+
+            if ((before.CommandSettings.ReturnType != next.CommandSettings.FieldType) && next.CommandSettings.FieldType != KasicType.ANY)
             {
                 return Helpers.Error(
                     new KasicError
