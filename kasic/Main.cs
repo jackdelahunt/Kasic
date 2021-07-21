@@ -30,7 +30,7 @@ namespace kasic
             for (int i = 0; i < lines.Length; i++)
             {
                 var currentLine = lines[i].Trim();
-                if (currentLine != "")
+                if (currentLine != "" && !currentLine.StartsWith("#"))
                 {
                     var result = RunLine(context, currentLine);
                     if (result.IsError)

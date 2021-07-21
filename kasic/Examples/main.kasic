@@ -1,6 +1,8 @@
+# set values and prompt
 set number 0
 set prompt Number_Is:
 
+# increase number and print with prompt
 print -c *prompt *number
 num *number | add 1 | set number
 
