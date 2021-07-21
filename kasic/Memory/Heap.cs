@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using kasic.Commands;
+using kasic.Kasic;
 using kasic.Logging;
 using kasic.Utils;
 using OperationResult;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using kasic.Commands;
+using kasic.Kasic;
 using kasic.Lexing;
 using kasic.Logging;
 using kasic.Parsing;
@@ -14,15 +15,22 @@ namespace kasic
         {
             if (args.Length > 0)
             {
-                Headless(args[0]);
+                Headless(new Context
+                {
+                    RuntimeMode = RuntimeMode.HEADLESS,
+                    LineNumber = 0
+                }, args[0]);
             }
             else
             {
-                CommandLine();
+                CommandLine(new Context
+                {
+                    RuntimeMode = RuntimeMode.COMMANDLINE
+                });
             }
         }
         
-        public static void Headless(string filename)
+        public static void Headless(Context context, string filename)
         {
             string[] lines = System.IO.File.ReadAllLines(filename);
             for (int i = 0; i < lines.Length; i++)
@@ -40,7 +48,7 @@ namespace kasic
             }
         }
 
-        public static void CommandLine()
+        public static void CommandLine(Context context)
         {
             while (true)
             {

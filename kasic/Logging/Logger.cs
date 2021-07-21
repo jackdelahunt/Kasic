@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-using kasic.Commands;
+using kasic.Kasic;
 
 namespace kasic.Logging
 {
@@ -47,22 +47,5 @@ namespace kasic.Logging
 
             Logln(builder.ToString());
         }
-    }
-
-    public class KasicError
-    {
-        public string Message;
-        public Command Command;
-        public KasicRegion Region;
-        public int Line;
-    }
-
-    public enum KasicRegion
-    {
-        UNKNOWN = -1,
-        LEXER,
-        PARSER,
-        RUNTIME,
-        HEAP,
     }
 }

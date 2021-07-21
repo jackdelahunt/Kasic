@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using kasic.Commands;
+using kasic.Kasic;
 using kasic.Lexing;
 using kasic.Logging;
 using kasic.Memory;
