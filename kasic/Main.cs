@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using kasic.Commands;
 using kasic.Kasic;
 using kasic.Lexing;
 using kasic.Logging;
 using kasic.Parsing;
 using OperationResult;
+using System.Web;
 
 namespace kasic
 {
@@ -15,24 +15,18 @@ namespace kasic
         {
             if (args.Length > 0)
             {
-                Headless(new Context
-                {
-                    RuntimeMode = RuntimeMode.HEADLESS,
-                    LineNumber = 0
-                }, args[0]);
+                Headless(Context.HeadlessContext, args[0]);
             }
             else
             {
-                CommandLine(new Context
-                {
-                    RuntimeMode = RuntimeMode.COMMANDLINE
-                });
+                CommandLine(Context.CommandLineContext);
             }
         }
         
-        public static void Headless(Context context, string filename)
+        public static List<KasicError> Headless(Context context, string filename)
         {
-            string[] lines = System.IO.File.ReadAllLines(filename);
+            var errors = new List<KasicError>();
+            string[] lines = System.IO.File.ReadAllLines(@filename);
             for (int i = 0; i < lines.Length; i++)
             {
                 var currentLine = lines[i].Trim();
@@ -43,9 +37,12 @@ namespace kasic
                     {
                         result.Error.Line = i;
                         Logger.LogError(result.Error);
+                        errors.Add(result.Error);
                     }
                 }
             }
+
+            return errors;
         }
 
         public static void CommandLine(Context context)

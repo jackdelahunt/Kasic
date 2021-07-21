@@ -16,3 +16,9 @@
 /home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.genruntimeconfig.cache
 /home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/CSharp.OperationResult.dll
 /home/jackdelahunt/Projects/kasic/kasic/obj/Debug/net5.0/kasic.csproj.CopyComplete
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/NUnit3.TestAdapter.dll
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/NUnit3.TestAdapter.pdb
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/nunit.engine.dll
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/nunit.engine.api.dll
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/nunit.engine.core.dll
+/home/jackdelahunt/Projects/kasic/kasic/bin/Debug/net5.0/testcentric.engine.metadata.dll

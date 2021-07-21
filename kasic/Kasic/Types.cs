@@ -5,6 +5,18 @@ namespace kasic.Kasic
 {
     public class Context
     {
+        public static Context HeadlessContext = new Context
+        {
+            RuntimeMode = RuntimeMode.HEADLESS,
+            LineNumber = 0
+        };
+        
+        public static Context CommandLineContext = new Context
+        {
+            RuntimeMode = RuntimeMode.COMMANDLINE,
+            LineNumber = 0
+        };
+        
         public RuntimeMode RuntimeMode;
         public int LineNumber;
     }

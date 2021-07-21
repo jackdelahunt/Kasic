@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using kasic;
+using kasic.Kasic;
 using kasic.Logging;
 
 namespace E2E.Tests
