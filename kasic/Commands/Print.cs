@@ -17,7 +17,6 @@ namespace kasic.Commands
                 MaxArgs = UInt32.MaxValue,
                 FieldType = KasicType.ANY,
                 ReturnType = KasicType.VOID,
-                DefinedFields = null,
             };
         }
 

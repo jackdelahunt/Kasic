@@ -41,6 +41,5 @@ namespace kasic.Commands
         public uint MaxArgs;
         public KasicType FieldType;
         public KasicType ReturnType;
-        public List<KasicType> DefinedFields;
     }
 }

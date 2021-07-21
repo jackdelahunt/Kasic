@@ -17,7 +17,6 @@ namespace kasic.Commands
                 MaxArgs = 2,
                 FieldType = KasicType.NUMBER,
                 ReturnType = KasicType.BOOL,
-                DefinedFields = null,
             };
         }
 

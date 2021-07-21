@@ -10,9 +10,6 @@ namespace kasic
 {
     public class Runtime
     {
-
-        public static string BreakInterrupt = "~£$%£$%~@~~£$@break"; 
-
         public List<Command> Commands { get; private set; }
         
         public Runtime(List<Command> commands)
@@ -26,11 +23,6 @@ namespace kasic
             foreach (var command in Commands)
             {
                 context.Command = command;
-
-                if (lastOut == BreakInterrupt)
-                {
-                    break;
-                }
                 
                 if (lastOut != null)
                 {

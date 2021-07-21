@@ -18,7 +18,6 @@ namespace kasic.Commands
                 MaxArgs = 2,
                 FieldType = KasicType.ANY,
                 ReturnType = KasicType.ANY,
-                DefinedFields = null,
             };
         }
 
