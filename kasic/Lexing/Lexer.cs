@@ -17,7 +17,7 @@ namespace kasic.Lexing
 
         public Result<List<CommandToken>, KasicError> Lex()
         {
-            var splits = Input.Split(" | ");
+            var splits = Input.Trim().Split(" | ");
             var commandTokens = new List<CommandToken>();
             foreach (var split in splits)
             {
