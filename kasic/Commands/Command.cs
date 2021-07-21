@@ -31,6 +31,7 @@ namespace kasic.Commands
         VOID,
         NUMBER,
         STRING,
+        BOOL,
         ANY
     }
 
