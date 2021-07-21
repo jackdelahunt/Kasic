@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using kasic.Kasic;
+using OperationResult;
 
 namespace kasic.Memory
 {
@@ -11,10 +13,21 @@ namespace kasic.Memory
             scope.Add(name, line);
         }
         
-        public static int FindGotoScope(string name)
+        public static Result<int, KasicError> FindGotoScope(Context context, string name)
         {
-            scope.TryGetValue(name, out var line);
-            return line;
+            bool exists = scope.TryGetValue(name, out var line);
+
+            if (exists)
+            {
+                return Helpers.Ok(line);
+            }
+
+            return Helpers.Error(new KasicError
+            {
+                Command = context.Command,
+                Line = context.Reader.LineNumber,
+                Message = $"Cannot find goto scope with name {name}"
+            });
         }
     }
 }

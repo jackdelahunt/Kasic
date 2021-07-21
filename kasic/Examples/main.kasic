@@ -3,15 +3,7 @@ set number 0
 set prompt Number_Is:
 
 # increase number and print with prompt
+> loop
 print -c *prompt *number
 num *number | add 1 | set number
-
-print -c *prompt *number
-num *number | add 1 | set number
-
->start
-print -c *prompt *number
-num *number | add 1 | set number
-
-print -c *prompt *number
-num *number | add 1 | set number
+goto loop

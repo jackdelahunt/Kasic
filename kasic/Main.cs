@@ -27,7 +27,7 @@ namespace kasic
                 CommandLine(new Context
                 {
                     Command = null,
-                    Reader = null,
+                    Reader = new Reader(),
                     RuntimeMode = RuntimeMode.COMMANDLINE
                 });
             }

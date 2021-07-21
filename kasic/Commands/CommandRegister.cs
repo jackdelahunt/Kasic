@@ -21,6 +21,7 @@ namespace kasic.Commands
             RegisterCommand(new Replace());
             RegisterCommand(new Set());
             RegisterCommand(new Print());
+            RegisterCommand(new Goto());
         }
         
         public static Result<Command, KasicError> FindCommand(string name)

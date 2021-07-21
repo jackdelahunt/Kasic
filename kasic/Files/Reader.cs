@@ -12,6 +12,14 @@ namespace kasic.Files
         private string[] lines;
         public int LineNumber { get; private set; }
 
+        public Reader()
+        {
+            Path = "";
+            LineNumber = 0;
+            lines = new string[0];
+            BuildScopes();
+        }
+        
         public Reader(string path)
         {
             Path = path;
