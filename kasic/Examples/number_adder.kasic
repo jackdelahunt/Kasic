@@ -1,0 +1,10 @@
+> set_number
+set number 1
+
+> loop
+num *number | add *number | set number
+print *number
+
+num *number | great 10000000000000000000000 | if set_number
+
+goto loop

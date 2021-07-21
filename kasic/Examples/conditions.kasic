@@ -13,4 +13,3 @@ print the_number_is_less
 goto finish
 
 > finish
-print end
