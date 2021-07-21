@@ -23,7 +23,7 @@ namespace kasic.Commands
 
         public override Result<string, KasicError> Run(Context context)
         {
-            var result = Types.ToNumber(Args[0]);
+            var result = Types.ToNumber(context, Args[0]);
             if (result.IsError)
             {
                 return Helpers.Error(result.Error);

@@ -8,7 +8,7 @@ namespace kasic.Utils
 {
     public static class Types
     {
-        public static Result<double, KasicError> ToNumber(string text)
+        public static Result<double, KasicError> ToNumber(Context context, string text)
         {
             try
             {
@@ -20,7 +20,26 @@ namespace kasic.Utils
                 return Helpers.Error(new KasicError
                 {
                     Message = $"Cannot convert {text} to a number",
-                    Region = KasicRegion.UNKNOWN
+                    Region = KasicRegion.UNKNOWN,
+                    Command = context.Command
+                });
+            }
+        }
+        
+        public static Result<bool, KasicError> ToBool(Context context, string text)
+        {
+            try
+            {
+                var boolean = Boolean.Parse(text);
+                return Helpers.Ok(boolean);
+            }
+            catch
+            {
+                return Helpers.Error(new KasicError
+                {
+                    Message = $"Cannot convert {text} to a boolean",
+                    Region = KasicRegion.UNKNOWN,
+                    Command = context.Command
                 });
             }
         }

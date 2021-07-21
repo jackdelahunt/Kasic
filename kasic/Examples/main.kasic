@@ -1,9 +1,16 @@
 # set values and prompt
-set number 0
-set prompt Number_Is:
+set number 11
 
-# increase number and print with prompt
-> loop
-print -c *prompt *number
-num *number | add 1 | set number
-goto loop
+num *number | great 10 | if greater
+goto less
+
+> greater
+print the_number_is_greater
+goto finish
+
+> less
+print the_number_is_less
+goto finish
+
+> finish
+print end

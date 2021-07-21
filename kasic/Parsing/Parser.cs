@@ -105,7 +105,7 @@ namespace kasic.Parsing
                     {
                         Region = KasicRegion.PARSER,
                         Command = next,
-                        Message = "Arg count mismatch",
+                        Message = $"Arg count mismatch expected between min:{next.CommandSettings.MinArgs} and max:{next.CommandSettings.MaxArgs} got {nextTotalArgAmount}",
                     });
             }
 
@@ -123,7 +123,7 @@ namespace kasic.Parsing
                     {
                         Region = KasicRegion.PARSER,
                         Command = command,
-                        Message = "Arg count mismatch",
+                        Message = $"Arg count mismatch expected between min:{command.CommandSettings.MinArgs} and max:{command.CommandSettings.MaxArgs} got {argCount}",
                     });
             }
 

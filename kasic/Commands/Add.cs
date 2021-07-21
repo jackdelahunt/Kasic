@@ -26,7 +26,7 @@ namespace kasic.Commands
             double total = 0;
             foreach (var arg in Args)
             {
-                var result = Types.ToNumber(arg);
+                var result = Types.ToNumber(context, arg);
                 if (result.IsError)
                 {
                     return Helpers.Error(result.Error);
