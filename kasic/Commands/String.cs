@@ -21,7 +21,7 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<string, KasicError> Run()
+        public override Result<string, KasicError> Run(Context context)
         {
             return Helpers.Ok(Args[0]);
         }

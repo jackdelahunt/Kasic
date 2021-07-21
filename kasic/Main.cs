@@ -32,7 +32,7 @@ namespace kasic
                 var currentLine = lines[i].Trim();
                 if (currentLine != "")
                 {
-                    var result = RunLine(currentLine);
+                    var result = RunLine(context, currentLine);
                     if (result.IsError)
                     {
                         result.Error.Line = i;
@@ -51,7 +51,7 @@ namespace kasic
             {
                 Console.Write(">>> ");
                 string input = Console.ReadLine().Trim();
-                var result = RunLine(input);
+                var result = RunLine(context, input);
                 if (result.IsError)
                 {
                     Logger.LogError(result.Error);
@@ -59,7 +59,7 @@ namespace kasic
             }
         }
 
-        public static Result<string, KasicError> RunLine(string line)
+        public static Result<string, KasicError> RunLine(Context context, string line)
         {
             var lexer = new Lexer(line);
             var lexerResult = lexer.Lex();
@@ -76,7 +76,7 @@ namespace kasic
             }
 
             var runtime = new Runtime(parserResult.Value);
-            var runtimeResult = runtime.Run();
+            var runtimeResult = runtime.Run(context);
             if (runtimeResult.IsError)
             {
                 return Helpers.Error(runtimeResult.Error);

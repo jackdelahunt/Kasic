@@ -12,7 +12,7 @@ namespace E2E.Tests
         [TestCase("string 20d | replace d 0 | num | add 200", "400")]
         public void SingleLineTest(string commandInput, string output)
         {
-            var result = Program.RunLine(commandInput);
+            var result = Program.RunLine(Context.CommandLineContext, commandInput);
             if (result.Error != null)
             {
                 Assert.IsNull(result.Error, $"Input: {commandInput}");

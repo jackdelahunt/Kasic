@@ -20,7 +20,7 @@ namespace kasic.Commands
             Flags = new List<string>();
         }
         
-        public virtual Result<string, KasicError> Run()
+        public virtual Result<string, KasicError> Run(Context context)
         {
             throw new NotImplementedException("Command command is not valid");
         }

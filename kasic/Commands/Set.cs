@@ -22,7 +22,7 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<string, KasicError> Run()
+        public override Result<string, KasicError> Run(Context context)
         {
             var name = Args[0];
             var value = Args[1];

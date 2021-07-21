@@ -21,9 +21,8 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<string, KasicError> Run()
+        public override Result<string, KasicError> Run(Context context)
         {
-            Logger.Logln("");
             if (Flags.Contains("-c"))
             {
                 foreach (var arg in Args)
@@ -38,7 +37,7 @@ namespace kasic.Commands
                     Logger.Log(arg + " ");
                 } 
             }
-
+            Logger.Logln("");
             return Helpers.Ok("");
         }
     }

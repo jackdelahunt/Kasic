@@ -8,17 +8,20 @@ namespace kasic.Kasic
         public static Context HeadlessContext = new Context
         {
             RuntimeMode = RuntimeMode.HEADLESS,
-            LineNumber = 0
+            LineNumber = 0,
+            Command = null
         };
         
         public static Context CommandLineContext = new Context
         {
             RuntimeMode = RuntimeMode.COMMANDLINE,
-            LineNumber = 0
+            LineNumber = 0,
+            Command = null
         };
         
         public RuntimeMode RuntimeMode;
         public int LineNumber;
+        public Command Command;
     }
 
     public enum RuntimeMode

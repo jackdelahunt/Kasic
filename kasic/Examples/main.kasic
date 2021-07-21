@@ -1,3 +1,14 @@
-set text 4OO | print
+set number 0
+set prompt Number_Is:
 
-print *text
+print -c *prompt *number
+num *number | add 1 | set number
+
+print -c *prompt *number
+num *number | add 1 | set number
+
+print -c *prompt *number
+num *number | add 1 | set number
+
+print -c *prompt *number
+num *number | add 1 | set number
