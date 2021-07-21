@@ -62,7 +62,7 @@ namespace kasic
             }
         }
 
-        public static Status<KasicError> RunLine(string line)
+        public static Result<string, KasicError> RunLine(string line)
         {
             var lexer = new Lexer(line);
             var lexerResult = lexer.Lex();
@@ -85,7 +85,7 @@ namespace kasic
                 return Helpers.Error(runtimeResult.Error);
             }
 
-            return Helpers.Ok();
+            return Helpers.Ok(runtimeResult.Value);
         }
     }
 }

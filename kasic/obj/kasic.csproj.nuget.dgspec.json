@@ -41,6 +41,10 @@
             "CSharp.OperationResult": {
               "target": "Package",
               "version": "[0.1.6, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[4.0.0, )"
             }
           },
           "imports": [

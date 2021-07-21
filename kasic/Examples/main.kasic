@@ -1,17 +1,3 @@
-set prompt The_current_number_is:
-set number 0
+set text 4OO | print
 
-num *number | add 1 | set number
-print *prompt *number
-
-num *number | add 1 | set number
-print *prompt *number
-
-num *number | add 1 | set number
-print *prompt *number
-
-num *number | add 1 | set number
-print *prompt *number
-
-num *number | add 1 | set number
-print *prompt *number
+print *text

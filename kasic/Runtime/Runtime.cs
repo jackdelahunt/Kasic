@@ -17,7 +17,7 @@ namespace kasic
             Commands = commands;
         }
 
-        public Status<KasicError> Run()
+        public Result<string, KasicError> Run()
         {
             string lastOut = null;
             foreach (var command in Commands)
@@ -35,7 +35,7 @@ namespace kasic
 
                 lastOut = result.Value;
             }
-            return Helpers.Ok();
+            return Helpers.Ok(lastOut);
         }
         
         

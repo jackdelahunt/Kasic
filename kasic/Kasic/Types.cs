@@ -1,3 +1,4 @@
+using System.Text;
 using kasic.Commands;
 
 namespace kasic.Kasic
@@ -14,14 +15,6 @@ namespace kasic.Kasic
         HEADLESS
     }
     
-    public class KasicError
-    {
-        public string Message;
-        public Command Command;
-        public KasicRegion Region;
-        public int Line;
-    }
-
     public enum KasicRegion
     {
         UNKNOWN = -1,
@@ -29,5 +22,45 @@ namespace kasic.Kasic
         PARSER,
         RUNTIME,
         HEAP,
+    }
+    
+    public class KasicError
+    {
+        public string Message;
+        public Command Command;
+        public KasicRegion Region;
+        public int Line;
+
+        public override string ToString()
+        {
+            string region = this.Region switch
+            {
+                KasicRegion.LEXER => "LEXER",
+                KasicRegion.PARSER => "PARSER",
+                KasicRegion.RUNTIME => "RUNTIME",
+                KasicRegion.HEAP => "HEAP",
+                _ => ""
+            };
+
+            StringBuilder builder = new StringBuilder();
+            
+            builder.Append($"[{this.Line}] ");
+            if (region != "")
+            {
+                builder.Append($"{region} ");
+            }
+            
+            if (this.Message != null)
+            {
+                builder.Append($"ERROR: {this.Message}; ");
+            }
+            
+            if (this.Command != null)
+            {
+                builder.Append($"{this.Command.ToString()}");
+            }
+
+            return builder.ToString();
+        }
     }
 }

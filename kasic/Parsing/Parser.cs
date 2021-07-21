@@ -132,6 +132,7 @@ namespace kasic.Parsing
 
         private Status<KasicError> FillReferences(Command command)
         {
+            // TODO: this assumes the set command is ran on another line meaning if set is ran on this line this fails
             for (int i = 0; i < command.Args.Count; i++)
             {
                 var arg = command.Args[i];

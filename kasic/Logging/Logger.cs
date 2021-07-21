@@ -18,34 +18,7 @@ namespace kasic.Logging
         
         public static void LogError(KasicError error)
         {
-            string region = error.Region switch
-            {
-                KasicRegion.LEXER => "LEXER",
-                KasicRegion.PARSER => "PARSER",
-                KasicRegion.RUNTIME => "RUNTIME",
-                KasicRegion.HEAP => "HEAP",
-                _ => ""
-            };
-
-            StringBuilder builder = new StringBuilder();
-            
-            builder.Append($"[{error.Line}] ");
-            if (region != "")
-            {
-                builder.Append($"{region} ");
-            }
-            
-            if (error.Message != null)
-            {
-                builder.Append($"ERROR: {error.Message}; ");
-            }
-            
-            if (error.Command != null)
-            {
-                builder.Append($"{error.Command.ToString()}");
-            }
-
-            Logln(builder.ToString());
+            Logln(error.ToString());
         }
     }
 }
