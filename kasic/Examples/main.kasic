@@ -9,6 +9,7 @@ num *number | add 1 | set number
 print -c *prompt *number
 num *number | add 1 | set number
 
+>start
 print -c *prompt *number
 num *number | add 1 | set number
 

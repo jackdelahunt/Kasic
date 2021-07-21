@@ -5,7 +5,7 @@ using kasic.Lexing;
 using kasic.Logging;
 using kasic.Parsing;
 using OperationResult;
-using System.Web;
+using kasic.Files;
 
 namespace kasic
 {
@@ -15,30 +15,48 @@ namespace kasic
         {
             if (args.Length > 0)
             {
-                Headless(Context.HeadlessContext, args[0]);
+                Headless(new Context
+                {
+                    Command = null,
+                    Reader = new Reader(args[0]),
+                    RuntimeMode = RuntimeMode.HEADLESS
+                });
             }
             else
             {
-                CommandLine(Context.CommandLineContext);
+                CommandLine(new Context
+                {
+                    Command = null,
+                    Reader = null,
+                    RuntimeMode = RuntimeMode.COMMANDLINE
+                });
             }
         }
         
-        public static List<KasicError> Headless(Context context, string filename)
+        public static List<KasicError> Headless(Context context)
         {
             var errors = new List<KasicError>();
-            string[] lines = System.IO.File.ReadAllLines(@filename);
-            for (int i = 0; i < lines.Length; i++)
+            bool running = true;
+            while (running)
             {
-                var currentLine = lines[i].Trim();
-                if (currentLine != "" && !currentLine.StartsWith("#"))
+                var readerResult = context.Reader.ReadLine();
+                if (readerResult.IsError)
                 {
-                    var result = RunLine(context, currentLine);
-                    if (result.IsError)
-                    {
-                        result.Error.Line = i;
-                        Logger.LogError(result.Error);
-                        errors.Add(result.Error);
-                    }
+                    return errors;
+                }
+
+                if (readerResult.Value == Reader.EOF)
+                {
+                    running = false;
+                    continue;
+                }
+
+                var runnerResult = RunLine(context, readerResult.Value);
+                if (runnerResult.IsError)
+                {
+                    runnerResult.Error.Line = context.Reader.LineNumber;
+                    Logger.LogError(runnerResult.Error);
+                    errors.Add(runnerResult.Error);
                 }
             }
 

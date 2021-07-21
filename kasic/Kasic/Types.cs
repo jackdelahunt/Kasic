@@ -1,26 +1,13 @@
 using System.Text;
 using kasic.Commands;
+using kasic.Files;
 
 namespace kasic.Kasic
 {
     public class Context
     {
-        public static Context HeadlessContext = new Context
-        {
-            RuntimeMode = RuntimeMode.HEADLESS,
-            LineNumber = 0,
-            Command = null
-        };
-        
-        public static Context CommandLineContext = new Context
-        {
-            RuntimeMode = RuntimeMode.COMMANDLINE,
-            LineNumber = 0,
-            Command = null
-        };
-        
         public RuntimeMode RuntimeMode;
-        public int LineNumber;
+        public Reader Reader;
         public Command Command;
     }
 
