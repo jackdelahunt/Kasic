@@ -14,6 +14,7 @@ namespace kasic.Commands
         {
             commands = new Dictionary<string, Command>();
             RegisterCommand(new Add());
+            RegisterCommand(new Mult());
             RegisterCommand(new Num());
             RegisterCommand(new Clear());
             RegisterCommand(new Exit());
