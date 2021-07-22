@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using kasic.Kasic;
 using OperationResult;
 
@@ -15,27 +16,33 @@ namespace kasic.Lexing
             Input = input;
         }
 
-        public Result<List<CommandToken>, KasicError> Lex()
+        public Result<List<CommandToken>, KasicError> Lex(Context context)
         {
             var splits = Input.Trim().Split(" | ");
             var commandTokens = new List<CommandToken>();
             foreach (var split in splits)
             {
-                commandTokens.Add(LexCommand(split));
+                var lexResult = LexCommand(context, split);
+                if (lexResult.IsError)
+                {
+                    return Helpers.Error(lexResult.Error);
+                }
+                
+                commandTokens.Add(lexResult.Value);
             }
 
             return commandTokens;
         }
 
-        private CommandToken LexCommand(string split)
+        private Result<CommandToken, KasicError> LexCommand(Context context, string split)
         {
-            var words = split.Split(" ");
+            var words = SplitIntoWords(split);
             var commandToken = new CommandToken(words[0]);
             
             for (int i = 1; i < words.Length; i++)
             {
                 string word = words[i];
-                if (word.Substring(0, 1) == "-")
+                if (word.StartsWith('-'))
                 {
                     try
                     {
@@ -54,6 +61,56 @@ namespace kasic.Lexing
             }
 
             return commandToken;
+        }
+
+        private string[] SplitIntoWords(string expression)
+        {
+            var words = new List<string>();
+            expression = expression.Trim();
+
+            for (int i = 0; i < expression.Length; i++)
+            {
+                var currentChar = expression[i];
+                switch (currentChar)
+                {
+                    case ' ': break;
+                    case '"':
+                        var literal = GetWord(expression, '"',i + 1);
+                        words.Add(literal);
+                        i += literal.Length + 1;
+                        break;
+                    default:  
+                        var word = GetWord(expression, ' ', i);
+                        words.Add(word);
+                        i += word.Length;
+                        break;
+                }
+            }
+
+            return words.ToArray();
+        }
+
+        private string GetWord(string expression, char stopper, int start)
+        {
+            int currentIndex = start;
+            while (currentIndex < expression.Length)
+            {
+                if (expression[currentIndex] == stopper)
+                {
+                    break;
+                }
+                currentIndex++;
+            }
+
+            int length = currentIndex - start;
+            if (length == 0)
+            {
+                return "";
+            }
+            else
+            {
+                return expression.Substring(start, currentIndex - start);
+            }
         }
     }
 }

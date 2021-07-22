@@ -1,0 +1,5 @@
+set literal "Hello World"
+set string "Hello World 2.0"
+
+string *literal | replace -i hello goodbye | print
+string *string | replace -i " " "_space_" | print

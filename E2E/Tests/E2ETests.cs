@@ -10,6 +10,7 @@ namespace E2E.Tests
         [TestCase("add 10 10", "20")]
         [TestCase("num 10 | add -123 | string", "-113")]
         [TestCase("string 20d | replace d 0 | num | add 200", "400")]
+        [TestCase("string \"hello world\" | replace o 0", "hell0 w0rld")]
         public void SingleLineTest(string commandInput, string output)
         {
             var result = Program.RunLine(new Context

@@ -80,7 +80,7 @@ namespace kasic
         public static Result<string, KasicError> RunLine(Context context, string line)
         {
             var lexer = new Lexer(line);
-            var lexerResult = lexer.Lex();
+            var lexerResult = lexer.Lex(context);
             if (lexerResult.IsError)
             {
                 return Helpers.Error(lexerResult.Error);
