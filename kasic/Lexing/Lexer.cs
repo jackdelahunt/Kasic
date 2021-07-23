@@ -39,7 +39,7 @@ namespace kasic.Lexing
             var words = SplitIntoWords(split);
             var commandToken = new CommandToken(words[0]);
             
-            for (int i = 1; i < words.Length; i++)
+            for (int i = 1; i < words.Count; i++)
             {
                 string word = words[i];
                 if (word.StartsWith('-'))
@@ -63,7 +63,7 @@ namespace kasic.Lexing
             return commandToken;
         }
 
-        private string[] SplitIntoWords(string expression)
+        private List<string> SplitIntoWords(string expression)
         {
             var words = new List<string>();
             expression = expression.Trim();
@@ -87,7 +87,7 @@ namespace kasic.Lexing
                 }
             }
 
-            return words.ToArray();
+            return words;
         }
 
         private string GetWord(string expression, char stopper, int start)
