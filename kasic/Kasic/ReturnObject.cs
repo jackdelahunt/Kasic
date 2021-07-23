@@ -109,7 +109,7 @@ namespace kasic.Kasic
 
         public override string ToString()
         {
-            return toReturn.ToString();
+            return toReturn == null ? "" : toReturn.ToString();
         }
         
         private void  Panic(object toReturn)

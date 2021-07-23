@@ -37,11 +37,12 @@ namespace kasic
 
                 lastOut = result.Value;
             }
+
+            var output = lastOut?.ToString();
+            if(context.RuntimeMode == RuntimeMode.COMMANDLINE && !string.IsNullOrEmpty(output))
+                Logger.Logln(output);
             
-            if(context.RuntimeMode == RuntimeMode.COMMANDLINE && lastOut != null)
-                Logger.Logln(lastOut.ToString());
-            
-            return Helpers.Ok(lastOut.ToString());
+            return Helpers.Ok(lastOut?.ToString());
         }
         
         
