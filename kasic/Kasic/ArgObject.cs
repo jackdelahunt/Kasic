@@ -19,7 +19,7 @@ namespace kasic.Kasic
             {
                 KasicType.NUMBER => ToNumbers(args),
                 KasicType.BOOL => ToBools(args),
-                _ => args.ToArray(),
+                _ => args,
                 
             };
 
@@ -43,24 +43,24 @@ namespace kasic.Kasic
             }
         }
 
-        public double[] AsNumbers()
+        public List<double> AsNumbers()
         {
-            return arguments as double[];
+            return arguments as List<double>;
         }
         
-        public bool[] AsBools()
+        public List<bool> AsBools()
         {
-            return arguments as bool[];
+            return arguments as List<bool>;
         }
         
-        public string[] AsStrings()
+        public List<string> AsStrings()
         {
-            return arguments as string[];
+            return arguments as List<string>;
         }
         
-        public string[] AsAny()
+        public List<string> AsAny()
         {
-            return arguments as string[];
+            return arguments as List<string>;
         }
 
         public Status<KasicError> PipeReturn(Context context, IReturnObject returnObject)
@@ -82,33 +82,41 @@ namespace kasic.Kasic
         
         private Status<KasicError> AddAsAny(Context context, string str)
         {
-            arguments = AsAny().Append(str).ToArray();
+            var args = AsAny();
+            args.Add(str);
+            arguments = args;
             Count++;
             return Helpers.Ok();
         }
 
-        private Status<KasicError> AddAsString(Context context, string str)
+        private Status<KasicError> AddAsString(Context context, string any)
         {
-            arguments = AsStrings().Append(str).ToArray();
+            var args = AsStrings();
+            args.Add(any);
+            arguments = args;
             Count++;
             return Helpers.Ok();
         }
 
         private Status<KasicError> AddAsNumber(Context context, double value)
         {
-            arguments = AsNumbers().Append(value).ToArray();
+            var args = AsNumbers();
+            args.Add(value);
+            arguments = args;
             Count++;
             return Helpers.Ok();
         }
         
         private Status<KasicError> AddAsBool(Context context, bool value)
         {
-            arguments = AsBools().Append(value).ToArray();
+            var args = AsBools();
+            args.Add(value);
+            arguments = args;
             Count++;
-            return Helpers.Ok(); 
+            return Helpers.Ok();
         }
 
-        private double[] ToNumbers(List<string> args)
+        private List<double> ToNumbers(List<string> args)
         {
             var numbers = new List<double>();
             foreach (var arg in args)
@@ -116,10 +124,10 @@ namespace kasic.Kasic
                 numbers.Add(Double.Parse(arg));
             }
 
-            return numbers.ToArray();
+            return numbers;
         }
         
-        private bool[] ToBools(List<string> args)
+        private List<bool> ToBools(List<string> args)
         {
             var numbers = new List<bool>();
             foreach (var arg in args)
@@ -127,7 +135,7 @@ namespace kasic.Kasic
                 numbers.Add(Boolean.Parse(arg));
             }
 
-            return numbers.ToArray();
+            return numbers;
         }
     }
 }

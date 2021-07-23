@@ -25,7 +25,7 @@ namespace kasic.Commands
             var args = ArgObject.AsNumbers();
             double total = args[0];
             
-            for (int i = 1; i < args.Length; i++)
+            for (int i = 1; i < args.Count; i++)
             {
                 var arg = args[i];
                 total *= arg;

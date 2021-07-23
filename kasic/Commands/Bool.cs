@@ -25,7 +25,7 @@ namespace kasic.Commands
         {
             var args = ArgObject.AsAny();
 
-            if (args.Length == 1)
+            if (args.Count == 1)
             {
                 var singleBoolResult = Types.ToBool(context, args[0]);
                 if (singleBoolResult.IsError)

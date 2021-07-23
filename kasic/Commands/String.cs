@@ -24,7 +24,7 @@ namespace kasic.Commands
         public override Result<IReturnObject, KasicError> Run(Context context)
         {
             var args = ArgObject.AsAny();
-            if (args.Length == 1)
+            if (args.Count == 1)
             {
                 return new ReturnObject(this, args[0]);
             }
