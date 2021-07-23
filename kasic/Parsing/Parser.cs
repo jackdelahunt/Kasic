@@ -20,7 +20,7 @@ namespace kasic.Parsing
             Tokens = tokens;
         }
 
-        public Result<List<Command>, KasicError> Parse()
+        public Result<List<Command>, KasicError> Parse(Context context)
         {
             var commands = new List<Command>();
             foreach (var token in Tokens)
@@ -30,9 +30,15 @@ namespace kasic.Parsing
                 {
                     return Helpers.Error(registerResult.Error);
                 }
+                
+                var argumentResult = ArgObject.New(context, token.Args, registerResult.Value.CommandSettings.FieldType);
+                if (argumentResult.IsError)
+                {
+                    return Helpers.Error(argumentResult.Error);
+                }
 
                 var command = registerResult.Value;
-                command.Args = token.Args;
+                command.ArgObject = argumentResult.Value;
                 command.Flags = token.Flags;
                 commands.Add(command);
             }
@@ -59,14 +65,14 @@ namespace kasic.Parsing
                 }
             }
 
-            foreach (var command in commands)
-            {
-                var result = FillReferences(command);
-                if (result.IsError)
-                {
-                    return Helpers.Error(result.Error);
-                }
-            }
+            // foreach (var command in commands)
+            // {
+            //     var result = FillReferences(command);
+            //     if (result.IsError)
+            //     {
+            //         return Helpers.Error(result.Error);
+            //     }
+            // }
 
             return commands;
         }
@@ -95,8 +101,8 @@ namespace kasic.Parsing
                         Message = $"Type mismatch got {before.CommandSettings.ReturnType} but expected {next.CommandSettings.FieldType}",
                     });
             }
-
-            int nextTotalArgAmount = next.Args.Count + 1;
+            
+            int nextTotalArgAmount = next.ArgObject.Count + 1;
             if (nextTotalArgAmount > next.CommandSettings.MaxArgs ||
                 nextTotalArgAmount < next.CommandSettings.MinArgs)
             {
@@ -114,7 +120,7 @@ namespace kasic.Parsing
 
         private Status<KasicError> ParseFirst(Command command)
         {
-            int argCount = command.Args.Count;
+            int argCount = command.ArgObject.Count;
             if (argCount > command.CommandSettings.MaxArgs ||
                 argCount < command.CommandSettings.MinArgs)
             {
@@ -130,25 +136,25 @@ namespace kasic.Parsing
             return Helpers.Ok();
         }
 
-        private Status<KasicError> FillReferences(Command command)
-        {
-            // TODO: this assumes the set command is ran on another line meaning if set is ran on this line this fails
-            for (int i = 0; i < command.Args.Count; i++)
-            {
-                var arg = command.Args[i];
-                if (arg.StartsWith("*"))
-                {
-                    var result = Heap.Reference(arg.Substring(1));
-                    if (result.IsError)
-                    {
-                        return Helpers.Error(result.Error);
-                    }
-
-                    command.Args[i] = result.Value;
-                }
-            }
-
-            return Helpers.Ok();
-        }
+        // private Status<KasicError> FillReferences(Command command)
+        // {
+        //     // TODO: this assumes the set command is ran on another line meaning if set is ran on this line this fails
+        //     for (int i = 0; i < command.Args.Count; i++)
+        //     {
+        //         var arg = command.Args[i];
+        //         if (arg.StartsWith("*"))
+        //         {
+        //             var result = Heap.Reference(arg.Substring(1));
+        //             if (result.IsError)
+        //             {
+        //                 return Helpers.Error(result.Error);
+        //             }
+        //
+        //             command.Args[i] = result.Value;
+        //         }
+        //     }
+        //
+        //     return Helpers.Ok();
+        // }
     }
 }

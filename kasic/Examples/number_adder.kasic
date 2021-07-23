@@ -1,10 +1,6 @@
-> set_number
-set number 1
+set number 0.0000001
 
 > loop
 num *number | add *number | set number
 print *number
-
-num *number | great 10000000000000000000000 | if set_number
-
 goto loop

@@ -1,0 +1,1 @@
+set text "Hello world" | string | print

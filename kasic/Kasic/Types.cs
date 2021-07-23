@@ -26,6 +26,15 @@ namespace kasic.Kasic
         HEAP,
     }
     
+    public enum KasicType
+    {
+        VOID,
+        NUMBER,
+        STRING,
+        BOOL,
+        ANY
+    }
+    
     public class KasicError
     {
         public string Message;

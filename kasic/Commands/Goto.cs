@@ -23,7 +23,8 @@ namespace kasic.Commands
 
         public override Result<string, KasicError> Run(Context context)
         {
-            var result = Scope.FindGotoScope(context, Args[0]);
+            var args = ArgObject.AsStrings();
+            var result = Scope.FindGotoScope(context, args[0]);
             if (result.IsError)
             {
                 return Helpers.Error(result.Error);

@@ -22,7 +22,7 @@ namespace kasic.Commands
 
         public override Result<string, KasicError> Run(Context context)
         {
-            return Helpers.Ok(Args[0]);
+            return Helpers.Ok(ArgObject.AsStrings()[0]);
         }
     }
 }

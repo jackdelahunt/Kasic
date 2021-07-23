@@ -87,7 +87,7 @@ namespace kasic
             }
                 
             var parser = new Parser(lexerResult.Value);
-            var parserResult = parser.Parse();
+            var parserResult = parser.Parse(context);
             if (parserResult.IsError)
             {
                 return Helpers.Error(parserResult.Error);

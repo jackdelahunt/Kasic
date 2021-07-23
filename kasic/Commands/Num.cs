@@ -22,13 +22,14 @@ namespace kasic.Commands
 
         public override Result<string, KasicError> Run(Context context)
         {
-            var result = Types.ToNumber(context, Args[0]);
+            var nums = ArgObject.AsAny();
+            var result = Types.ToNumber(context, nums[0]);
             if (result.IsError)
             {
                 return Helpers.Error(result.Error);
             }
             
-            return Args[0];
+            return result.Value.ToString();
         }
     }
 }

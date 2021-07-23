@@ -23,9 +23,10 @@ namespace kasic.Commands
 
         public override Result<string, KasicError> Run(Context context)
         {
-            var oldValue = Args[0];
-            var newValue = Args[1];
-            var text = Args[2];
+            var args = ArgObject.AsStrings();
+            var oldValue = args[0];
+            var newValue = args[1];
+            var text = args[2];
 
             text = text.Replace(oldValue, newValue, Flags.Contains("-i"), CultureInfo.InvariantCulture);
 

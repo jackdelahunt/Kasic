@@ -26,7 +26,7 @@ namespace kasic
                 
                 if (lastOut != null)
                 {
-                    command.Args.Add(lastOut);
+                    command.ArgObject.AddArgument(context, lastOut);
                 }
 
                 var result = command.Run(context);

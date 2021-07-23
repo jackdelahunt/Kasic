@@ -22,16 +22,11 @@ namespace kasic.Commands
 
         public override Result<string, KasicError> Run(Context context)
         {
+            var args = ArgObject.AsNumbers();
             double total = 0;
-            foreach (var arg in Args)
+            foreach (var arg in args)
             {
-                var result = Types.ToNumber(context, arg);
-                if (result.IsError)
-                {
-                    return Helpers.Error(result.Error);
-                }
-
-                total += result.Value;
+                total += arg;
             }
 
             return Helpers.Ok(total.ToString());

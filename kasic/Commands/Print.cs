@@ -22,16 +22,17 @@ namespace kasic.Commands
 
         public override Result<string, KasicError> Run(Context context)
         {
+            var args = ArgObject.AsAny();
             if (Flags.Contains("-c"))
             {
-                foreach (var arg in Args)
+                foreach (var arg in args)
                 {
                     Logger.Log(arg);
                 }
             }
             else
             {
-                foreach (var arg in Args)
+                foreach (var arg in args)
                 {
                     Logger.Log(arg + " ");
                 } 

@@ -22,19 +22,8 @@ namespace kasic.Commands
 
         public override Result<string, KasicError> Run(Context context)
         {
-            var resultOne = Types.ToNumber(context, Args[0]);
-            if (resultOne.IsError)
-            {
-                return Helpers.Error(resultOne.Error);
-            }
-            
-            var resultTwo = Types.ToNumber(context, Args[1]);
-            if (resultTwo.IsError)
-            {
-                return Helpers.Error(resultTwo.Error);
-            }
-
-            if (resultTwo.Value > resultOne.Value)
+            var args = ArgObject.AsNumbers();
+            if (args[0] < args[1])
                 return Helpers.Ok("true");
             
             return Helpers.Ok("false");

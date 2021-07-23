@@ -23,8 +23,9 @@ namespace kasic.Commands
 
         public override Result<string, KasicError> Run(Context context)
         {
-            var name = Args[0];
-            var value = Args[1];
+            var args = ArgObject.AsAny();
+            var name = args[0];
+            var value = args[1];
 
             Heap.Push(name, value);
             return Helpers.Ok(value);

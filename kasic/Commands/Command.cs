@@ -9,14 +9,13 @@ namespace kasic.Commands
     public abstract class Command
     {
         public string Name;
-        public List<string> Args;
+        public ArgObject ArgObject;
         public List<string> Flags;
         public CommandSettings CommandSettings;
 
         public Command(string name)
         {
-            this.Name = name;
-            Args = new List<string>();
+            Name = name;
             Flags = new List<string>();
         }
         
@@ -24,15 +23,6 @@ namespace kasic.Commands
         {
             throw new NotImplementedException("Command command is not valid");
         }
-    }
-
-    public enum KasicType
-    {
-        VOID,
-        NUMBER,
-        STRING,
-        BOOL,
-        ANY
     }
 
     public struct CommandSettings
