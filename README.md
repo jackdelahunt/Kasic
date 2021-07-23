@@ -19,43 +19,26 @@ See the [examples](https://github.com/jackdelahunt/Kasic/tree/main/kasic/Example
 
 ### Type inference
 ```bash
-set number 10
-string *number | replace 1 2 | set modified_number
-num *modified_number | add 2 | print
-
->>> 22
+num number 10
+string *number | replace 1 2 | num number
+print *number
+```
+```bash
+20
 ```
 ### Loop iteration
 ```bash
-set number 0
-set prompt Number_Is:
+num number 0
+string prompt "The number is:"
 
 > loop
-print -c *prompt *number
-num *number | add 1 | set number
+print *prompt *number
+add *number 0.01 | num number
 goto loop
-
->>> 0
->>> 1
-...
 ```
-
-### Conditional logic
 ```bash
-set number 11
-
-num *number | great 10 | if greater
-goto less
-
-> greater
-print the_number_is_greater
-goto finish
-
-> less
-print the_number_is_less
-goto finish
-
-> finish
-
->>> the_number_is_greater
+0.01
+0.02
+0.03
+...
 ```
