@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using kasic.Kasic;
 using kasic.Logging;
 using kasic.Utils;
@@ -23,11 +24,7 @@ namespace kasic.Commands
         public override Result<IReturnObject, KasicError> Run(Context context)
         {
             var args = ArgObject.AsNumbers();
-            double total = 0;
-            foreach (var arg in args)
-            {
-                total += arg;
-            }
+            var total = args.Sum();
 
             return new ReturnObject(this, total);
         }
