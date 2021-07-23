@@ -1,6 +1,19 @@
 # Kasic
 Kasic is an interpretuer that trys to replicate the usage of Unix commands but as a programming language.
 
+### Command Line
+```bash
+% kasic
+>>> print "Hello world"
+Hello World
+```
+
+### Headless
+```bash
+% kasic hello_word.kasic
+Hello World
+```
+
 ## Examples
 See the [examples](https://github.com/jackdelahunt/Kasic/tree/main/kasic/Examples) directories for more comprehansive examples.
 
