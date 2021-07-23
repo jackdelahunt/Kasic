@@ -1,0 +1,34 @@
+using System;
+using System.Collections.Generic;
+using kasic.Kasic;
+using kasic.Logging;
+using kasic.Utils;
+using OperationResult;
+
+namespace kasic.Commands
+{
+    public class Bool : Command
+    {
+        public Bool() : base("bool")
+        {
+            CommandSettings = new CommandSettings()
+            {
+                MinArgs = 1,
+                MaxArgs = 1,
+                FieldType = KasicType.ANY,
+                ReturnType = KasicType.BOOL,
+            };
+        }
+
+        public override Result<IReturnObject, KasicError> Run(Context context)
+        {
+            var arg = ArgObject.AsAny()[0];
+            var result = Types.ToBool(context, arg);
+            if (result.IsError)
+            {
+                return Helpers.Error(result.Error);
+            }
+            return new ReturnObject(this, result.Value);
+        }
+    }
+}

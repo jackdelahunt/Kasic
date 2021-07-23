@@ -28,20 +28,26 @@ namespace kasic.Utils
         
         public static Result<bool, KasicError> ToBool(Context context, string text)
         {
-            try
+            bool value;
+            switch(text.ToLower())
             {
-                var boolean = Boolean.Parse(text);
-                return Helpers.Ok(boolean);
+                case "0":
+                    value = false; break;
+                case "1":
+                    value = true; break;
+                case "false":
+                    value = false; break;
+                case "true":
+                    value = true; break;
+                default:
+                    return Helpers.Error(new KasicError
+                    {
+                        Command = context.Command,
+                        Message = $"{text} cannot be converted to a bool"
+                    }); break;
             }
-            catch
-            {
-                return Helpers.Error(new KasicError
-                {
-                    Message = $"Cannot convert {text} to a boolean",
-                    Region = KasicRegion.UNKNOWN,
-                    Command = context.Command
-                });
-            }
+
+            return value;
         }
     }
 }
