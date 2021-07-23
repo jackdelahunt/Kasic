@@ -37,7 +37,7 @@ namespace kasic.Kasic
             {
                 return Helpers.Error(new KasicError
                 {
-                    Command = context.Command,
+                    Context = context,
                     Message = e.Message
                 });
             }

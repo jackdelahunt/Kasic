@@ -24,8 +24,7 @@ namespace kasic.Memory
 
             return Helpers.Error(new KasicError
             {
-                Command = context.Command,
-                Line = context.Reader.LineNumber,
+                Context = context,
                 Message = $"Cannot find goto scope with name {name}"
             });
         }

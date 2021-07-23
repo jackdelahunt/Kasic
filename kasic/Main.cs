@@ -54,7 +54,6 @@ namespace kasic
                 var runnerResult = RunLine(context, readerResult.Value);
                 if (runnerResult.IsError)
                 {
-                    runnerResult.Error.Line = context.Reader.LineNumber;
                     Logger.LogError(runnerResult.Error);
                     errors.Add(runnerResult.Error);
                 }
@@ -79,13 +78,15 @@ namespace kasic
 
         public static Result<string, KasicError> RunLine(Context context, string line)
         {
+            context.Region = KasicRegion.LEXER;
             var lexer = new Lexer(line);
             var lexerResult = lexer.Lex(context);
             if (lexerResult.IsError)
             {
                 return Helpers.Error(lexerResult.Error);
             }
-                
+               
+            context.Region = KasicRegion.PARSER;
             var parser = new Parser(lexerResult.Value);
             var parserResult = parser.Parse(context);
             if (parserResult.IsError)
@@ -93,6 +94,7 @@ namespace kasic
                 return Helpers.Error(parserResult.Error);
             }
 
+            context.Region = KasicRegion.RUNTIME;
             var runtime = new Runtime(parserResult.Value);
             var runtimeResult = runtime.Run(context);
             if (runtimeResult.IsError)

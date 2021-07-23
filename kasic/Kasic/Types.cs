@@ -9,6 +9,7 @@ namespace kasic.Kasic
         public RuntimeMode RuntimeMode;
         public Reader Reader;
         public Command Command;
+        public KasicRegion Region;
     }
 
     public enum RuntimeMode
@@ -23,7 +24,6 @@ namespace kasic.Kasic
         LEXER,
         PARSER,
         RUNTIME,
-        HEAP,
     }
     
     public enum KasicType
@@ -37,25 +37,22 @@ namespace kasic.Kasic
     
     public class KasicError
     {
+        public Context Context;
         public string Message;
-        public Command Command;
-        public KasicRegion Region;
-        public int Line;
 
         public override string ToString()
         {
-            string region = this.Region switch
+            string region = this.Context.Region switch
             {
                 KasicRegion.LEXER => "LEXER",
                 KasicRegion.PARSER => "PARSER",
                 KasicRegion.RUNTIME => "RUNTIME",
-                KasicRegion.HEAP => "HEAP",
                 _ => ""
             };
 
             StringBuilder builder = new StringBuilder();
             
-            builder.Append($"[{this.Line}] ");
+            builder.Append($"[{this.Context.Reader.LineNumber}] ");
             if (region != "")
             {
                 builder.Append($"{region} ");
@@ -66,9 +63,9 @@ namespace kasic.Kasic
                 builder.Append($"ERROR: {this.Message}; ");
             }
             
-            if (this.Command != null)
+            if (this.Context.Command != null)
             {
-                builder.Append($"{this.Command.ToString()}");
+                builder.Append($"{this.Context.Command.ToString()}");
             }
 
             return builder.ToString();

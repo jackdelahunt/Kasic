@@ -31,7 +31,6 @@ namespace kasic.Memory
                 return Helpers.Error(new KasicError
                 {
                     Message = $"Field {name} is not set",
-                    Region = KasicRegion.HEAP
                 });
             }
 

@@ -27,7 +27,7 @@ namespace kasic.Commands
             RegisterCommand(new Greater());
         }
         
-        public static Result<Command, KasicError> FindCommand(string name)
+        public static Result<Command, KasicError> FindCommand(Context context, string name)
         {
             commands.TryGetValue(name, out var command);
             var type = command?.GetType();
@@ -36,8 +36,7 @@ namespace kasic.Commands
             {
                 return Helpers.Error(new KasicError
                 {
-                    Command = null,
-                    Region = KasicRegion.PARSER,
+                    Context = context,
                     Message = $"Cannot find command with the name: {name}"
                 });
             }

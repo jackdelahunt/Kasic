@@ -20,8 +20,7 @@ namespace kasic.Utils
                 return Helpers.Error(new KasicError
                 {
                     Message = $"Cannot convert '{text}' to a number",
-                    Region = KasicRegion.UNKNOWN,
-                    Command = context.Command
+                    Context = context
                 });
             }
         }
@@ -42,7 +41,7 @@ namespace kasic.Utils
                 default:
                     return Helpers.Error(new KasicError
                     {
-                        Command = context.Command,
+                        Context = context,
                         Message = $"{text} cannot be converted to a bool"
                     }); break;
             }

@@ -25,7 +25,7 @@ namespace kasic.Parsing
             var commands = new List<Command>();
             foreach (var token in Tokens)
             {
-                var registerResult = CommandRegister.FindCommand(token.Name);
+                var registerResult = CommandRegister.FindCommand(context, token.Name);
                 if (registerResult.IsError)
                 {
                     return Helpers.Error(registerResult.Error);
@@ -48,7 +48,7 @@ namespace kasic.Parsing
                 var command = commands[i];
                 if (i == 0)
                 {
-                    var status = ParseFirst(command);
+                    var status = ParseFirst(context, command);
                     if (status.IsError)
                     {
                         return Helpers.Error(status.Error);
@@ -58,7 +58,7 @@ namespace kasic.Parsing
                 
                 // command always has one before here
                 var beforeCommand = commands[i - 1];
-                var parseCommandStatus = ParseCommand(beforeCommand, command);
+                var parseCommandStatus = ParseCommand(context, beforeCommand, command);
                 if (parseCommandStatus.IsError)
                 {
                     return Helpers.Error(parseCommandStatus.Error);
@@ -77,7 +77,7 @@ namespace kasic.Parsing
             return commands;
         }
 
-        private Status<KasicError> ParseCommand(Command before, Command next)
+        private Status<KasicError> ParseCommand(Context context, Command before, Command next)
         {
             if (before.CommandSettings.ReturnType == KasicType.VOID ||
                 next.CommandSettings.FieldType == KasicType.VOID)
@@ -85,8 +85,7 @@ namespace kasic.Parsing
                 return Helpers.Error(
                     new KasicError
                     {
-                        Region = KasicRegion.PARSER,
-                        Command = next,
+                        Context = context,
                         Message = "Cannot chain commands that return or require VOID",
                     });
             }
@@ -96,8 +95,7 @@ namespace kasic.Parsing
                 return Helpers.Error(
                     new KasicError
                     {
-                        Region = KasicRegion.PARSER,
-                        Command = next,
+                        Context = context,
                         Message = $"Type mismatch got {before.CommandSettings.ReturnType} but expected {next.CommandSettings.FieldType}",
                     });
             }
@@ -109,8 +107,7 @@ namespace kasic.Parsing
                 return Helpers.Error(
                     new KasicError
                     {
-                        Region = KasicRegion.PARSER,
-                        Command = next,
+                        Context = context,
                         Message = $"Arg count mismatch expected between min:{next.CommandSettings.MinArgs} and max:{next.CommandSettings.MaxArgs} got {nextTotalArgAmount}",
                     });
             }
@@ -118,7 +115,7 @@ namespace kasic.Parsing
             return Helpers.Ok();
         }
 
-        private Status<KasicError> ParseFirst(Command command)
+        private Status<KasicError> ParseFirst(Context context, Command command)
         {
             int argCount = command.ArgObject.Count;
             if (argCount > command.CommandSettings.MaxArgs ||
@@ -127,8 +124,7 @@ namespace kasic.Parsing
                 return Helpers.Error(
                     new KasicError
                     {
-                        Region = KasicRegion.PARSER,
-                        Command = command,
+                        Context = context,
                         Message = $"Arg count mismatch expected between min:{command.CommandSettings.MinArgs} and max:{command.CommandSettings.MaxArgs} got {argCount}",
                     });
             }
