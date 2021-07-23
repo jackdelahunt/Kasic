@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using kasic.Kasic;
 using kasic.Logging;
+using kasic.Memory;
 using kasic.Utils;
 using OperationResult;
 
@@ -14,7 +15,7 @@ namespace kasic.Commands
             CommandSettings = new CommandSettings()
             {
                 MinArgs = 1,
-                MaxArgs = 1,
+                MaxArgs = 2,
                 FieldType = KasicType.ANY,
                 ReturnType = KasicType.BOOL,
             };
@@ -22,13 +23,26 @@ namespace kasic.Commands
 
         public override Result<IReturnObject, KasicError> Run(Context context)
         {
-            var arg = ArgObject.AsAny()[0];
-            var result = Types.ToBool(context, arg);
-            if (result.IsError)
+            var args = ArgObject.AsAny();
+
+            if (args.Length == 1)
             {
-                return Helpers.Error(result.Error);
+                var singleBoolResult = Types.ToBool(context, args[0]);
+                if (singleBoolResult.IsError)
+                {
+                    return Helpers.Error(singleBoolResult.Error);
+                }
+                return new ReturnObject(this, singleBoolResult.Value);
             }
-            return new ReturnObject(this, result.Value);
+
+            var multiArgResult = Types.ToBool(context, args[1]);
+            if (multiArgResult.IsError)
+            {
+                return Helpers.Error(multiArgResult.Error);
+            }
+
+            Heap.Push(args[0], multiArgResult.Value, KasicType.BOOL);
+            return new ReturnObject(this, multiArgResult.Value);
         }
     }
 }

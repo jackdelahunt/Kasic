@@ -1,0 +1,3 @@
+string greeting "Hello world"
+
+print *greeting

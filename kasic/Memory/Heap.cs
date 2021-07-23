@@ -10,9 +10,9 @@ namespace kasic.Memory
 {
     public static class Heap
     {
-        private static Dictionary<string, string> heap = new Dictionary<string, string>();
+        private static Dictionary<string, Tuple<object, KasicType>> heap = new Dictionary<string, Tuple<object, KasicType>>();
 
-        public static Status<KasicError> Push(string name, string data)
+        public static Status<KasicError> Push(string name, object data, KasicType type)
         {
             if (heap.ContainsKey(name))
             {
@@ -20,11 +20,11 @@ namespace kasic.Memory
                 heap.Remove(name);
             }
 
-            heap.Add(name, data);
+            heap.Add(name, new Tuple<object, KasicType>(data, type));
             return Helpers.Ok();
         }
         
-        public static Result<string, KasicError> Reference(string name)
+        public static Result<Tuple<object, KasicType>, KasicError> Reference(string name)
         {
             if (!heap.ContainsKey(name))
             {

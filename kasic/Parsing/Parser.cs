@@ -25,22 +25,35 @@ namespace kasic.Parsing
             var commands = new List<Command>();
             foreach (var token in Tokens)
             {
-                var registerResult = CommandRegister.FindCommand(context, token.Name);
+                // Find the command based on the token name
+                var commandToken = token;
+                var registerResult = CommandRegister.FindCommand(context, commandToken.Name);
                 if (registerResult.IsError)
                 {
                     return Helpers.Error(registerResult.Error);
                 }
+
+                var foundCommand = registerResult.Value;
                 
-                var argumentResult = ArgObject.New(context, token.Args, registerResult.Value.CommandSettings.FieldType);
+                // Fill any references in the token args
+                var result = FillReferences(context, commandToken.Args, foundCommand.CommandSettings.FieldType);
+                if (result.IsError)
+                {
+                    return Helpers.Error(result.Error);
+                }
+
+                commandToken.Args = result.Value;
+
+                // Create arg object from referenced filled args
+                var argumentResult = ArgObject.New(context, commandToken.Args, foundCommand.CommandSettings.FieldType);
                 if (argumentResult.IsError)
                 {
                     return Helpers.Error(argumentResult.Error);
                 }
 
-                var command = registerResult.Value;
-                command.ArgObject = argumentResult.Value;
-                command.Flags = token.Flags;
-                commands.Add(command);
+                registerResult.Value.ArgObject = argumentResult.Value;
+                registerResult.Value.Flags = commandToken.Flags;
+                commands.Add(registerResult.Value);
             }
 
             for (int i = 0; i < commands.Count; i++)
@@ -64,15 +77,6 @@ namespace kasic.Parsing
                     return Helpers.Error(parseCommandStatus.Error);
                 }
             }
-
-            // foreach (var command in commands)
-            // {
-            //     var result = FillReferences(command);
-            //     if (result.IsError)
-            //     {
-            //         return Helpers.Error(result.Error);
-            //     }
-            // }
 
             return commands;
         }
@@ -132,25 +136,34 @@ namespace kasic.Parsing
             return Helpers.Ok();
         }
 
-        // private Status<KasicError> FillReferences(Command command)
-        // {
-        //     // TODO: this assumes the set command is ran on another line meaning if set is ran on this line this fails
-        //     for (int i = 0; i < command.Args.Count; i++)
-        //     {
-        //         var arg = command.Args[i];
-        //         if (arg.StartsWith("*"))
-        //         {
-        //             var result = Heap.Reference(arg.Substring(1));
-        //             if (result.IsError)
-        //             {
-        //                 return Helpers.Error(result.Error);
-        //             }
-        //
-        //             command.Args[i] = result.Value;
-        //         }
-        //     }
-        //
-        //     return Helpers.Ok();
-        // }
+        private Result<List<string>, KasicError> FillReferences(Context context, List<string> args, KasicType type)
+        {
+            // TODO: this assumes the set command is ran on another line meaning if set is ran on this line this fails
+            for (int i = 0; i < args.Count; i++)
+            {
+                var arg = args[i];
+                if (arg.StartsWith("*"))
+                {
+                    var result = Heap.Reference(arg.Substring(1));
+                    if (result.IsError)
+                    {
+                        return Helpers.Error(result.Error);
+                    }
+
+                    if (result.Value.Item2 != type && type != KasicType.ANY)
+                    {
+                        return Helpers.Error(new KasicError
+                        {
+                            Context = context,
+                            Message = $"expected type {type} but got {result.Value.Item2}"
+                        });
+                    }
+        
+                    args[i] = result.Value.Item1.ToString();
+                }
+            }
+        
+            return Helpers.Ok(args);
+        }
     }
 }

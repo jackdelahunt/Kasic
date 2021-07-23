@@ -1,6 +1,7 @@
-set number 0.0000001
+num total 0
+num adder 0.0001
 
 > loop
-num *number | add *number | set number
-print *number
+add *total *adder | num total
+print *total
 goto loop

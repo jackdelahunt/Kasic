@@ -1,1 +1,2 @@
-set text "Hello world" | string | print
+string text "Hello world"
+print *text
