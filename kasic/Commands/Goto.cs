@@ -21,7 +21,7 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<string, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context)
         {
             var args = ArgObject.AsStrings();
             var result = Scope.FindGotoScope(context, args[0]);
@@ -31,7 +31,7 @@ namespace kasic.Commands
             }
 
             context.Reader.MovePointer(result.Value);
-            return Helpers.Ok("");
+            return new ReturnObject(this);
         }
     }
 }

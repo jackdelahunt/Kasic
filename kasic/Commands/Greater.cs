@@ -20,13 +20,10 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<string, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context)
         {
             var args = ArgObject.AsNumbers();
-            if (args[0] < args[1])
-                return Helpers.Ok("true");
-            
-            return Helpers.Ok("false");
+            return new ReturnObject(this, args[0] < args[1]);
         }
     }
 }

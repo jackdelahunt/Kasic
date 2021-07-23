@@ -60,20 +60,31 @@ namespace kasic.Kasic
         
         public string[] AsAny()
         {
-            return AsStrings();
+            return arguments as string[];
         }
 
-        public Status<KasicError> AddArgument(Context context, string arg)
+        public Status<KasicError> PipeReturn(Context context, IReturnObject returnObject)
         {
             switch(this.type)
             {
                 case KasicType.NUMBER:
-                    return AddAsNumber(context, arg); break;
+                    return AddAsNumber(context, returnObject.AsNumber()); break;
                 case KasicType.BOOL:
-                    return AddAsBool(context, arg); break;
+                    return AddAsBool(context, returnObject.AsBool()); break;
+                case KasicType.ANY:
+                    return AddAsAny(context, returnObject.AsAny()); break;
+                case KasicType.STRING:
+                    return AddAsString(context, returnObject.AsString()); break;
                 default:
-                    return AddAsString(context, arg); break;
+                    throw new ArgumentException("Tried to pipe VOID");
             };
+        }
+        
+        private Status<KasicError> AddAsAny(Context context, string str)
+        {
+            arguments = AsAny().Append(str).ToArray();
+            Count++;
+            return Helpers.Ok();
         }
 
         private Status<KasicError> AddAsString(Context context, string str)
@@ -83,28 +94,16 @@ namespace kasic.Kasic
             return Helpers.Ok();
         }
 
-        private Status<KasicError> AddAsNumber(Context context, string str)
+        private Status<KasicError> AddAsNumber(Context context, double value)
         {
-            var result = Types.ToNumber(context, str);
-            if (result.IsError)
-            {
-                return Helpers.Error(result.Error);
-            }
-            
-            arguments = AsNumbers().Append(result.Value).ToArray();
+            arguments = AsNumbers().Append(value).ToArray();
             Count++;
             return Helpers.Ok();
         }
         
-        private Status<KasicError> AddAsBool(Context context, string str)
+        private Status<KasicError> AddAsBool(Context context, bool value)
         {
-            var result = Types.ToBool(context, str);
-            if (result.IsError)
-            {
-                return Helpers.Error(result.Error);
-            }
-            
-            arguments = AsBools().Append(result.Value).ToArray();
+            arguments = AsBools().Append(value).ToArray();
             Count++;
             return Helpers.Ok(); 
         }

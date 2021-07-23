@@ -19,14 +19,14 @@ namespace kasic
 
         public Result<string, KasicError> Run(Context context)
         {
-            string lastOut = null;
+            IReturnObject lastOut = null;
             foreach (var command in Commands)
             {
                 context.Command = command;
                 
                 if (lastOut != null)
                 {
-                    command.ArgObject.AddArgument(context, lastOut);
+                    command.ArgObject.PipeReturn(context, lastOut);
                 }
 
                 var result = command.Run(context);
@@ -38,10 +38,10 @@ namespace kasic
                 lastOut = result.Value;
             }
             
-            if(context.RuntimeMode == RuntimeMode.COMMANDLINE && !String.IsNullOrEmpty(lastOut))
-                Logger.Logln(lastOut);
+            if(context.RuntimeMode == RuntimeMode.COMMANDLINE && lastOut != null)
+                Logger.Logln(lastOut.ToString());
             
-            return Helpers.Ok(lastOut);
+            return Helpers.Ok(lastOut.ToString());
         }
         
         

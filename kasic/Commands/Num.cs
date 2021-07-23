@@ -20,7 +20,7 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<string, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context)
         {
             var nums = ArgObject.AsAny();
             var result = Types.ToNumber(context, nums[0]);
@@ -29,7 +29,7 @@ namespace kasic.Commands
                 return Helpers.Error(result.Error);
             }
             
-            return result.Value.ToString();
+            return new ReturnObject(this, result.Value);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<string, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context)
         {
             var args = ArgObject.AsAny();
             if (Flags.Contains("-c"))
@@ -38,7 +38,7 @@ namespace kasic.Commands
                 } 
             }
             Logger.Logln("");
-            return Helpers.Ok("");
+            return new ReturnObject(this);
         }
     }
 }

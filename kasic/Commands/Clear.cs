@@ -19,10 +19,10 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<string, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context)
         {
             Console.Clear();
-            return Helpers.Ok("");
+            return new ReturnObject(this);
         }
     }
 }

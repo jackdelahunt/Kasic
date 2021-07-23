@@ -20,9 +20,9 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<string, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context)
         {
-            return Helpers.Ok(ArgObject.AsStrings()[0]);
+            return new ReturnObject(this, ArgObject.AsAny()[0]);
         }
     }
 }

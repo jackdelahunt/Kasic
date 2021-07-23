@@ -21,14 +21,14 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<string, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context)
         {
             var args = ArgObject.AsAny();
             var name = args[0];
             var value = args[1];
 
             Heap.Push(name, value);
-            return Helpers.Ok(value);
+            return new ReturnObject(this, value);
         }
     }
 }

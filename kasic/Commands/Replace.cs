@@ -21,7 +21,7 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<string, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context)
         {
             var args = ArgObject.AsStrings();
             var oldValue = args[0];
@@ -30,7 +30,7 @@ namespace kasic.Commands
 
             text = text.Replace(oldValue, newValue, Flags.Contains("-i"), CultureInfo.InvariantCulture);
 
-            return Helpers.Ok(text);
+            return new ReturnObject(this, text);
         }
     }
 }

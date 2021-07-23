@@ -20,7 +20,7 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<string, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context)
         {
             var args = ArgObject.AsNumbers();
             double total = args[0];
@@ -31,7 +31,7 @@ namespace kasic.Commands
                 total *= arg;
             }
 
-            return Helpers.Ok(total.ToString());
+            return new ReturnObject(this, total);
         }
     }
 }
