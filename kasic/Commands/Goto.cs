@@ -16,15 +16,18 @@ namespace kasic.Commands
             {
                 MinArgs = 1,
                 MaxArgs = 1,
-                FieldType = KasicType.STRING,
+                ArgumentList = new ArgumentList(new List<KasicType>()
+                {
+                    KasicType.STRING
+                }),
                 ReturnType = KasicType.VOID,
             };
         }
 
         public override Result<IReturnObject, KasicError> Run(Context context)
         {
-            var args = ArgObject.AsStrings();
-            var result = Scope.FindGotoScope(context, args[0]);
+            var arg = ArgObject.AsString(0);
+            var result = Scope.FindGotoScope(context, arg);
             if (result.IsError)
             {
                 return Helpers.Error(result.Error);

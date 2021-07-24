@@ -12,6 +12,10 @@ namespace E2E.Tests
         [TestCase("string 20d | replace d 0 | num | add 200", "400")]
         [TestCase("string \"hello world\" | replace o 0", "hell0 w0rld")]
         [TestCase("string 10 | num | string | num | string | num | add 10", "20")]
+        [TestCase("num 0 | bool | string", "False")]
+        [TestCase("num 100 | mult 2 | add 1", "201")]
+        [TestCase("num 100 | great 99", "True")]
+        
         public void SingleLineTest(string commandInput, string output)
         {
             var result = Program.RunLine(new Context

@@ -16,33 +16,23 @@ namespace kasic.Commands
             {
                 MinArgs = 1,
                 MaxArgs = 2,
-                FieldType = KasicType.ANY,
+                ArgumentList = new ArgumentList(new List<KasicType>()
+                {
+                    KasicType.ANY,
+                }),
                 ReturnType = KasicType.NUMBER,
             };
         }
 
         public override Result<IReturnObject, KasicError> Run(Context context)
         {
-            var args = ArgObject.AsAny();
-
-            if (args.Count == 1)
+            var arg = ArgObject.AsAny(0);
+            var result = Types.ToNumber(context, arg);
+            if (result.IsError)
             {
-                var singleNumberResult = Types.ToNumber(context, args[0]);
-                if (singleNumberResult.IsError)
-                {
-                    return Helpers.Error(singleNumberResult.Error);
-                }
-                return new ReturnObject(this, singleNumberResult.Value);
+                return Helpers.Error(result.Error);
             }
-
-            var multiArgResult = Types.ToNumber(context, args[1]);
-            if (multiArgResult.IsError)
-            {
-                return Helpers.Error(multiArgResult.Error);
-            }
-
-            Heap.Push(args[0], multiArgResult.Value, KasicType.NUMBER);
-            return new ReturnObject(this, multiArgResult.Value);
+            return new ReturnObject(this, result.Value);
         }
     }
 }

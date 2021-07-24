@@ -15,15 +15,20 @@ namespace kasic.Commands
             {
                 MinArgs = 2,
                 MaxArgs = 2,
-                FieldType = KasicType.NUMBER,
+                ArgumentList = new ArgumentList(new List<KasicType>()
+                {
+                    KasicType.NUMBER,
+                    KasicType.NUMBER
+                }),
                 ReturnType = KasicType.BOOL,
             };
         }
 
         public override Result<IReturnObject, KasicError> Run(Context context)
         {
-            var args = ArgObject.AsNumbers();
-            return new ReturnObject(this, args[0] < args[1]);
+            var num1 = ArgObject.AsNumber(0);
+            var num2 = ArgObject.AsNumber(1);
+            return new ReturnObject(this, num1 < num2);
         }
     }
 }

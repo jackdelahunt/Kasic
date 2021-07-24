@@ -1,2 +1,1 @@
-string text "Hello world"
-print *text
+print "Hello world"

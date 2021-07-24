@@ -15,19 +15,22 @@ namespace kasic.Commands
             {
                 MinArgs = 2,
                 MaxArgs = UInt32.MaxValue,
-                FieldType = KasicType.NUMBER,
+                ArgumentList = new ArgumentList(new List<KasicType>()
+                {
+                    KasicType.NUMBER,
+                    KasicType.NUMBER
+                }),
                 ReturnType = KasicType.NUMBER,
             };
         }
 
         public override Result<IReturnObject, KasicError> Run(Context context)
         {
-            var args = ArgObject.AsNumbers();
-            double total = args[0];
+            double total = ArgObject.AsNumber(0);
             
-            for (int i = 1; i < args.Count; i++)
+            for (int i = 1; i < ArgObject.Count; i++)
             {
-                var arg = args[i];
+                var arg = ArgObject.AsNumber(i);
                 total *= arg;
             }
 

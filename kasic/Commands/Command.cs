@@ -29,7 +29,7 @@ namespace kasic.Commands
     {
         public uint MinArgs;
         public uint MaxArgs;
-        public KasicType FieldType;
+        public ArgumentList ArgumentList;
         public KasicType ReturnType;
     }
 }

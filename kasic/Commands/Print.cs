@@ -15,27 +15,24 @@ namespace kasic.Commands
             {
                 MinArgs = 1,
                 MaxArgs = UInt32.MaxValue,
-                FieldType = KasicType.ANY,
+                ArgumentList = new ArgumentList(new List<KasicType>()
+                {
+                    KasicType.ANY
+                }),
                 ReturnType = KasicType.VOID,
             };
         }
 
         public override Result<IReturnObject, KasicError> Run(Context context)
         {
-            var args = ArgObject.AsAny();
+            var arg = ArgObject.AsAny(0);
             if (Flags.Contains("-c"))
             {
-                foreach (var arg in args)
-                {
-                    Logger.Log(arg);
-                }
+                Logger.Log(arg);
             }
             else
             {
-                foreach (var arg in args)
-                {
-                    Logger.Log(arg + " ");
-                } 
+                Logger.Log(arg + " ");
             }
             Logger.Logln("");
             return new ReturnObject(this);

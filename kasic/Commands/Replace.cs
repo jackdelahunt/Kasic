@@ -16,17 +16,21 @@ namespace kasic.Commands
             {
                 MinArgs = 3,
                 MaxArgs =  3,
-                FieldType = KasicType.STRING,
+                ArgumentList = new ArgumentList(new List<KasicType>()
+                {
+                    KasicType.STRING,
+                    KasicType.STRING,
+                    KasicType.STRING
+                }),
                 ReturnType = KasicType.STRING,
             };
         }
 
         public override Result<IReturnObject, KasicError> Run(Context context)
         {
-            var args = ArgObject.AsStrings();
-            var oldValue = args[0];
-            var newValue = args[1];
-            var text = args[2];
+            var oldValue = ArgObject.AsString(0);
+            var newValue = ArgObject.AsString(1);
+            var text = ArgObject.AsString(2);
 
             text = text.Replace(oldValue, newValue, Flags.Contains("-i"), CultureInfo.InvariantCulture);
 

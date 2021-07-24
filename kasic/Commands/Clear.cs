@@ -14,7 +14,10 @@ namespace kasic.Commands
             {
                 MinArgs = 0,
                 MaxArgs = 0,
-                FieldType = KasicType.VOID,
+                ArgumentList = new ArgumentList(new List<KasicType>()
+                {
+                    KasicType.VOID
+                }),
                 ReturnType = KasicType.VOID,
             };
         }

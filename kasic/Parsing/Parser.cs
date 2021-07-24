@@ -36,24 +36,25 @@ namespace kasic.Parsing
                 var foundCommand = registerResult.Value;
                 
                 // Fill any references in the token args
-                var result = FillReferences(context, commandToken.Args, foundCommand.CommandSettings.FieldType);
-                if (result.IsError)
-                {
-                    return Helpers.Error(result.Error);
-                }
-
-                commandToken.Args = result.Value;
+                // var result = FillReferences(context, commandToken.Args, foundCommand.CommandSettings.FieldType);
+                // if (result.IsError)
+                // {
+                //     return Helpers.Error(result.Error);
+                // }
+                //
+                // commandToken.Args = result.Value;
 
                 // Create arg object from referenced filled args
-                var argumentResult = ArgObject.New(context, commandToken.Args, foundCommand.CommandSettings.FieldType);
+                var argumentResult = ArgObject.New(context, commandToken.Args, foundCommand.CommandSettings.ArgumentList);
                 if (argumentResult.IsError)
                 {
                     return Helpers.Error(argumentResult.Error);
                 }
 
-                registerResult.Value.ArgObject = argumentResult.Value;
-                registerResult.Value.Flags = commandToken.Flags;
-                commands.Add(registerResult.Value);
+
+                foundCommand.ArgObject = argumentResult.Value;
+                foundCommand.Flags = commandToken.Flags;
+                commands.Add(foundCommand);
             }
 
             for (int i = 0; i < commands.Count; i++)
@@ -83,8 +84,13 @@ namespace kasic.Parsing
 
         private Status<KasicError> ParseCommand(Context context, Command before, Command next)
         {
-            if (before.CommandSettings.ReturnType == KasicType.VOID ||
-                next.CommandSettings.FieldType == KasicType.VOID)
+            var returningType = before.CommandSettings.ReturnType;
+            var firstInputType = next.CommandSettings.ArgumentList.argumentTypes[0];
+            var awaitingInputType = next.CommandSettings.ArgumentList.argumentTypes[next.ArgObject.Count];
+            
+            
+            
+            if (returningType == KasicType.VOID || firstInputType == KasicType.VOID)
             {
                 return Helpers.Error(
                     new KasicError
@@ -94,13 +100,13 @@ namespace kasic.Parsing
                     });
             }
 
-            if ((before.CommandSettings.ReturnType != next.CommandSettings.FieldType) && next.CommandSettings.FieldType != KasicType.ANY)
+            if ((returningType != awaitingInputType) && awaitingInputType != KasicType.ANY)
             {
                 return Helpers.Error(
                     new KasicError
                     {
                         Context = context,
-                        Message = $"Type mismatch got {before.CommandSettings.ReturnType} but expected {next.CommandSettings.FieldType}",
+                        Message = $"Type mismatch got {before.CommandSettings.ReturnType} but expected {awaitingInputType}",
                     });
             }
             

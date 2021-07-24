@@ -8,29 +8,33 @@ namespace kasic.Kasic
 {
     public class ArgObject
     {
-        private KasicType type;
-        private object arguments;
-        public int Count { get; private set; }
+        private ArgumentList argumentList;
+        private List<object> arguments;
+        public int Count => arguments.Count;
 
-        public ArgObject(List<string> args, KasicType type)
+        public ArgObject(List<string> args, ArgumentList argumentList)
         {
-            this.type = type;
-            arguments = type switch
+            this.argumentList = argumentList;
+            this.arguments = new List<object>();
+            for (int i = 0; i < args.Count; i++)
             {
-                KasicType.NUMBER => ToNumbers(args),
-                KasicType.BOOL => ToBools(args),
-                _ => args,
-                
-            };
-
-            Count = args.Count;
+                switch (this.argumentList.argumentTypes[i])
+                {
+                    case KasicType.NUMBER:
+                        this.arguments.Add(ToNumber(args[i])); break;
+                    case KasicType.BOOL:
+                        this.arguments.Add(ToBool(args[i])); break;
+                    default:
+                        this.arguments.Add(args[i]); break;
+                }
+            }
         }
 
-        public static Result<ArgObject, KasicError> New(Context context, List<string> args, KasicType type)
+        public static Result<ArgObject, KasicError> New(Context context, List<string> args, ArgumentList argumentList)
         {
             try
             {
-                return Helpers.Ok(new ArgObject(args, type));
+                return Helpers.Ok(new ArgObject(args, argumentList));
                 
             }
             catch (Exception e)
@@ -43,29 +47,41 @@ namespace kasic.Kasic
             }
         }
 
-        public List<double> AsNumbers()
+        public double AsNumber(int index)
         {
-            return arguments as List<double>;
+            if (this.arguments[index] is double @return)
+                return @return;
+            
+            Panic(this.arguments[index]);
+            return 0;
         }
         
-        public List<bool> AsBools()
+        public bool AsBool(int index)
         {
-            return arguments as List<bool>;
+            if (this.arguments[index] is bool @return)
+                return @return;
+            
+            Panic(this.arguments[index]);
+            return false;
         }
         
-        public List<string> AsStrings()
+        public string AsString(int index)
         {
-            return arguments as List<string>;
+            if (this.arguments[index] is string @return)
+                return @return;
+            
+            Panic(this.arguments[index]);
+            return "";
         }
         
-        public List<string> AsAny()
+        public string AsAny(int index)
         {
-            return arguments as List<string>;
+            return this.arguments[index].ToString();
         }
 
         public Status<KasicError> PipeReturn(Context context, IReturnObject returnObject)
         {
-            switch(this.type)
+            switch(this.argumentList.argumentTypes[this.arguments.Count])
             {
                 case KasicType.NUMBER:
                     return AddAsNumber(context, returnObject.AsNumber()); break;
@@ -79,63 +95,44 @@ namespace kasic.Kasic
                     throw new ArgumentException("Tried to pipe VOID");
             };
         }
-        
+
         private Status<KasicError> AddAsAny(Context context, string str)
         {
-            var args = AsAny();
-            args.Add(str);
-            arguments = args;
-            Count++;
+            this.arguments.Add(str);
             return Helpers.Ok();
         }
 
         private Status<KasicError> AddAsString(Context context, string any)
         {
-            var args = AsStrings();
-            args.Add(any);
-            arguments = args;
-            Count++;
+            this.arguments.Add(any);
             return Helpers.Ok();
         }
 
-        private Status<KasicError> AddAsNumber(Context context, double value)
+        private Status<KasicError> AddAsNumber(Context context, double number)
         {
-            var args = AsNumbers();
-            args.Add(value);
-            arguments = args;
-            Count++;
+            this.arguments.Add(number);
             return Helpers.Ok();
         }
         
         private Status<KasicError> AddAsBool(Context context, bool value)
         {
-            var args = AsBools();
-            args.Add(value);
-            arguments = args;
-            Count++;
+            this.arguments.Add(value);
             return Helpers.Ok();
         }
 
-        private List<double> ToNumbers(List<string> args)
+        private double ToNumber(string arg)
         {
-            var numbers = new List<double>();
-            foreach (var arg in args)
-            {
-                numbers.Add(Double.Parse(arg));
-            }
-
-            return numbers;
+            return Double.Parse(arg);
         }
         
-        private List<bool> ToBools(List<string> args)
+        private bool ToBool(string arg)
         {
-            var numbers = new List<bool>();
-            foreach (var arg in args)
-            {
-                numbers.Add(Boolean.Parse(arg));
-            }
-
-            return numbers;
+            return Boolean.Parse(arg);
+        }
+        
+        private void  Panic(object toReturn)
+        {
+            throw new ArgumentException($"Panic when returning this {toReturn}");
         }
     }
 }

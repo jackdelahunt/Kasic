@@ -16,21 +16,18 @@ namespace kasic.Commands
             {
                 MinArgs = 1,
                 MaxArgs = 2,
-                FieldType = KasicType.ANY,
+                ArgumentList = new ArgumentList(new List<KasicType>()
+                {
+                    KasicType.ANY
+                }),
                 ReturnType = KasicType.STRING,
             };
         }
 
         public override Result<IReturnObject, KasicError> Run(Context context)
         {
-            var args = ArgObject.AsAny();
-            if (args.Count == 1)
-            {
-                return new ReturnObject(this, args[0]);
-            }
-
-            Heap.Push(args[0], args[1], KasicType.STRING);
-            return new ReturnObject(this, args[1]);
+            var arg = ArgObject.AsAny(0);
+            return new ReturnObject(this, arg);
         }
     }
 }
