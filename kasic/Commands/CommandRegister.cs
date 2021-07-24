@@ -16,6 +16,7 @@ namespace kasic.Commands
             RegisterCommand(new Add());
             RegisterCommand(new Mult());
             RegisterCommand(new Num());
+            RegisterCommand(new NumRef());
             RegisterCommand(new String());
             RegisterCommand(new Bool());
             RegisterCommand(new Clear());

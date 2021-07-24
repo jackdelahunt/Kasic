@@ -25,6 +25,11 @@ namespace kasic.Utils
             }
         }
         
+        public static Result<double, KasicError> ToNumber(Context context, bool value)
+        {
+            return value ? 1 : 0;
+        }
+        
         public static Result<bool, KasicError> ToBool(Context context, string text)
         {
             bool value;

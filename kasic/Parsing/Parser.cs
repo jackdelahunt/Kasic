@@ -26,8 +26,7 @@ namespace kasic.Parsing
             foreach (var token in Tokens)
             {
                 // Find the command based on the token name
-                var commandToken = token;
-                var registerResult = CommandRegister.FindCommand(context, commandToken.Name);
+                var registerResult = CommandRegister.FindCommand(context, token.Name);
                 if (registerResult.IsError)
                 {
                     return Helpers.Error(registerResult.Error);
@@ -35,17 +34,15 @@ namespace kasic.Parsing
 
                 var foundCommand = registerResult.Value;
                 
-                // Fill any references in the token args
-                // var result = FillReferences(context, commandToken.Args, foundCommand.CommandSettings.FieldType);
-                // if (result.IsError)
-                // {
-                //     return Helpers.Error(result.Error);
-                // }
-                //
-                // commandToken.Args = result.Value;
-
-                // Create arg object from referenced filled args
-                var argumentResult = ArgObject.New(context, commandToken.Args, foundCommand.CommandSettings.ArgumentList);
+                // Fill any references in the token args and store them as their base type
+                var builtArgumentsResult = BuildArguments(context, token.Args, foundCommand.CommandSettings.ArgumentList);
+                if (builtArgumentsResult.IsError)
+                {
+                    return Helpers.Error(builtArgumentsResult.Error);
+                }
+                
+                // Build arg object from built arguments
+                var argumentResult = ArgObject.New(context, builtArgumentsResult.Value, foundCommand.CommandSettings.ArgumentList);
                 if (argumentResult.IsError)
                 {
                     return Helpers.Error(argumentResult.Error);
@@ -53,7 +50,7 @@ namespace kasic.Parsing
 
 
                 foundCommand.ArgObject = argumentResult.Value;
-                foundCommand.Flags = commandToken.Flags;
+                foundCommand.Flags = token.Flags;
                 commands.Add(foundCommand);
             }
 
@@ -142,34 +139,41 @@ namespace kasic.Parsing
             return Helpers.Ok();
         }
 
-        private Result<List<string>, KasicError> FillReferences(Context context, List<string> args, KasicType type)
+        private Result<List<object>, KasicError> BuildArguments(Context context, List<string> args, ArgumentList argumentList)
         {
+            var returningObject = new List<object>();
             // TODO: this assumes the set command is ran on another line meaning if set is ran on this line this fails
             for (int i = 0; i < args.Count; i++)
             {
                 var arg = args[i];
                 if (arg.StartsWith("*"))
                 {
-                    var result = Heap.Reference(arg.Substring(1));
+                    var argumentType = argumentList.argumentTypes[i];
+                    var result = Heap.Reference(context, arg.Substring(1));
                     if (result.IsError)
                     {
                         return Helpers.Error(result.Error);
                     }
 
-                    if (result.Value.Item2 != type && type != KasicType.ANY)
+                    var objectAndTypeTuple = result.Value;
+                    if (objectAndTypeTuple.Item2 != argumentType && argumentType != KasicType.ANY)
                     {
                         return Helpers.Error(new KasicError
                         {
                             Context = context,
-                            Message = $"expected type {type} but got {result.Value.Item2}"
+                            Message = $"expected type {argumentType} but got {result.Value.Item2}"
                         });
                     }
         
-                    args[i] = result.Value.Item1.ToString();
+                    returningObject.Add(objectAndTypeTuple.Item1);
+                }
+                else
+                {
+                    returningObject.Add(arg);
                 }
             }
         
-            return Helpers.Ok(args);
+            return Helpers.Ok(returningObject);
         }
     }
 }

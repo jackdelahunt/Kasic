@@ -1,7 +1,7 @@
-num total 0
-num adder 0.0001
+&num total 0
+&num adder 0.0001
 
 > loop
-add *total *adder | num total
+add *total *adder | &num total
 print *total
 goto loop

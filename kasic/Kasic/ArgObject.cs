@@ -12,39 +12,51 @@ namespace kasic.Kasic
         private List<object> arguments;
         public int Count => arguments.Count;
 
-        public ArgObject(List<string> args, ArgumentList argumentList)
+        public ArgObject(List<object> arguments, ArgumentList argumentList)
         {
             this.argumentList = argumentList;
-            this.arguments = new List<object>();
-            for (int i = 0; i < args.Count; i++)
+            this.arguments = arguments;
+        }
+
+        /*
+         * Verifies arguments match the argument list given
+         */
+        public Status<KasicError> Build(Context context)
+        {
+            List<object> builtArguments = new List<object>();
+            for (int i = 0; i < this.arguments.Count; i++)
             {
                 switch (this.argumentList.argumentTypes[i])
                 {
                     case KasicType.NUMBER:
-                        this.arguments.Add(ToNumber(args[i])); break;
+                        var toNumberResult = ToNumber(context, this.arguments[i]);
+                        if (toNumberResult.IsError)
+                        {
+                            return Helpers.Error(toNumberResult.Error);
+                        }
+                        builtArguments.Add(toNumberResult.Value); break;
                     case KasicType.BOOL:
-                        this.arguments.Add(ToBool(args[i])); break;
+                        var toBoolResult = ToBool(context, this.arguments[i]);
+                        if (toBoolResult.IsError)
+                        {
+                            return Helpers.Error(toBoolResult.Error);
+                        }
+                        builtArguments.Add(toBoolResult.Value); break;
                     default:
-                        this.arguments.Add(args[i]); break;
+                        builtArguments.Add(this.arguments[i]); break;
                 }
             }
+
+            this.arguments = builtArguments;
+
+            return Helpers.Ok();
         }
 
-        public static Result<ArgObject, KasicError> New(Context context, List<string> args, ArgumentList argumentList)
+        public static Result<ArgObject, KasicError> New(Context context, List<object> arguments, ArgumentList argumentList)
         {
-            try
-            {
-                return Helpers.Ok(new ArgObject(args, argumentList));
-                
-            }
-            catch (Exception e)
-            {
-                return Helpers.Error(new KasicError
-                {
-                    Context = context,
-                    Message = e.Message
-                });
-            }
+            var arg = new ArgObject(arguments, argumentList);
+            arg.Build(context);
+            return arg;
         }
 
         public double AsNumber(int index)
@@ -120,14 +132,56 @@ namespace kasic.Kasic
             return Helpers.Ok();
         }
 
-        private double ToNumber(string arg)
+        private Result<double, KasicError> ToNumber(Context context, object arg)
         {
-            return Double.Parse(arg);
+            if (arg is double @num)
+            {
+                return @num;
+            }
+            
+            if (arg is string @str)
+            {
+                var stringCastResult = Types.ToNumber(context, @str);
+                if (stringCastResult.IsError)
+                {
+                    return Helpers.Error(stringCastResult.Error);
+                }
+
+                return Helpers.Ok(stringCastResult.Value);
+            }
+
+            return Helpers.Error(new KasicError
+            {
+                Context = context,
+                Message = $"{arg} is not NUMBER, BOOL or STRING"
+            });
         }
         
-        private bool ToBool(string arg)
+        private Result<bool, KasicError> ToBool(Context context, object arg)
         {
-            return Boolean.Parse(arg);
+            if (arg is bool @bool)
+            {
+                return @bool;
+            }
+            
+            if (arg is string @str)
+            {
+                var stringCastResult = Types.ToBool(context, @str);
+                if (stringCastResult.IsError)
+                {
+                    return Helpers.Error(stringCastResult.Error);
+                }
+
+                return Helpers.Ok(stringCastResult.Value);
+            }
+            
+            
+
+            return Helpers.Error(new KasicError
+            {
+                Context = context,
+                Message = $"{arg} is not NUMBER, BOOL or STRING"
+            });
         }
         
         private void  Panic(object toReturn)

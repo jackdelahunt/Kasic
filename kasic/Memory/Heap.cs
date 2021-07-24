@@ -24,12 +24,13 @@ namespace kasic.Memory
             return Helpers.Ok();
         }
         
-        public static Result<Tuple<object, KasicType>, KasicError> Reference(string name)
+        public static Result<Tuple<object, KasicType>, KasicError> Reference(Context context, string name)
         {
             if (!heap.ContainsKey(name))
             {
                 return Helpers.Error(new KasicError
                 {
+                    Context = context,
                     Message = $"Field {name} is not set",
                 });
             }
