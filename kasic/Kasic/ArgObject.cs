@@ -55,7 +55,11 @@ namespace kasic.Kasic
         public static Result<ArgObject, KasicError> New(Context context, List<object> arguments, ArgumentList argumentList)
         {
             var arg = new ArgObject(arguments, argumentList);
-            arg.Build(context);
+            var buildResult = arg.Build(context);
+            if (buildResult.IsError)
+            {
+                return Helpers.Error(buildResult.Error);
+            }
             return arg;
         }
 
