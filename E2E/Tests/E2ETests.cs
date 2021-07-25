@@ -15,6 +15,8 @@ namespace E2E.Tests
         [TestCase("num 0 | bool | string", "False")]
         [TestCase("num 100 | mult 2 | add 1", "201")]
         [TestCase("num 100 | great 99", "True")]
+        [TestCase("&num value 10 | great 9", "True")]
+        [TestCase("&string text \"Hello World\" | replace -i h J", "Jello World")]
         
         public void SingleLineTest(string commandInput, string output)
         {
