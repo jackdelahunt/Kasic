@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="csFastFloat" Version="3.0.0" />
       <PackageReference Include="CSharp.OperationResult" Version="0.1.6" />
       <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
     </ItemGroup>

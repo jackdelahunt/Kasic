@@ -39,11 +39,16 @@ namespace kasic
                 lastOut = result.Value;
             }
 
-            var output = lastOut?.ToString();
-            if(context.RuntimeMode == RuntimeMode.COMMANDLINE && !string.IsNullOrEmpty(output))
-                Logger.Logln(output);
-            
-            return Helpers.Ok(lastOut?.ToString());
+            if (context.RuntimeMode == RuntimeMode.COMMANDLINE)
+            {
+                var output = lastOut?.ToString();
+                if (!string.IsNullOrEmpty(output))
+                {
+                    Logger.Logln(output);
+                }
+            }
+
+            return Helpers.Ok("");
         }
         
         

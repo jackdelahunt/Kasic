@@ -1,7 +1,7 @@
 using System;
 using kasic.Commands;
 using kasic.Kasic;
-using kasic.Logging;
+using csFastFloat;
 using OperationResult;
 
 namespace kasic.Utils
@@ -10,19 +10,15 @@ namespace kasic.Utils
     {
         public static Result<double, KasicError> ToNumber(Context context, string text)
         {
-            try
+            if (FastDoubleParser.TryParseDouble(text, out var value))
             {
-                var number = Double.Parse(text);
-                return Helpers.Ok(number);
+                return Helpers.Ok(value);
             }
-            catch
+            return Helpers.Error(new KasicError
             {
-                return Helpers.Error(new KasicError
-                {
-                    Message = $"Cannot convert '{text}' to a number",
-                    Context = context
-                });
-            }
+                Message = $"Cannot convert '{text}' to a number",
+                Context = context
+            });
         }
         
         public static Result<double, KasicError> ToNumber(Context context, bool value)
