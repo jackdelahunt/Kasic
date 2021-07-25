@@ -42,3 +42,12 @@ goto loop
 0.03
 ...
 ```
+## Speed Comparision
+See [here](https://github.com/jackdelahunt/Kasic/tree/main/kasic/Examples/Speed) for the code for each language.
+
+| Language | Speed(ms) |
+| -------- | --------- |
+| Kasic | 4820 |
+| Python | 100 |
+| Rust | 1 |
+| C++ | <1 |
