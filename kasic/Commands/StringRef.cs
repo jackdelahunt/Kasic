@@ -14,7 +14,7 @@ namespace kasic.Commands
         {
             CommandSettings = new CommandSettings()
             {
-                MinArgs = 1,
+                MinArgs = 2,
                 MaxArgs = 2,
                 ArgumentList = new ArgumentList(new List<KasicType>()
                 {

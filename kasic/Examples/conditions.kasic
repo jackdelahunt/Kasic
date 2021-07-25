@@ -1,15 +1,15 @@
 # set values and prompt
-set number 11
+&num number 9
 
-num *number | great 10 | if greater
-goto less
+great 10 *number | &bool result
+if *result greater less
 
 > greater
-print the_number_is_greater
+print "The number is greater"
 goto finish
 
 > less
-print the_number_is_less
+print "The number is less"
 goto finish
 
 > finish

@@ -26,6 +26,7 @@ namespace kasic.Commands
             RegisterCommand(new Replace());
             RegisterCommand(new Print());
             RegisterCommand(new Goto());
+            RegisterCommand(new If());
             RegisterCommand(new Greater());
         }
         
