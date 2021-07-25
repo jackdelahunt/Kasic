@@ -26,17 +26,16 @@ namespace kasic.Memory
         
         public static Result<Tuple<object, KasicType>, KasicError> Reference(Context context, string name)
         {
-            if (!heap.ContainsKey(name))
+            if (heap.TryGetValue(name, out var data))
             {
-                return Helpers.Error(new KasicError
-                {
-                    Context = context,
-                    Message = $"Field {name} is not set",
-                });
+                return Helpers.Ok(data);
             }
-
-            heap.TryGetValue(name, out var data);
-            return Helpers.Ok(data);
+            
+            return Helpers.Error(new KasicError
+            {
+                Context = context,
+                Message = $"Field {name} is not set",
+            });
         }
     }
 }

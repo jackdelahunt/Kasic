@@ -23,7 +23,7 @@ namespace kasic.Kasic
          */
         public Status<KasicError> Build(Context context)
         {
-            List<object> builtArguments = new List<object>();
+            List<object> builtArguments = new List<object>(10);
             for (int i = 0; i < this.arguments.Count; i++)
             {
                 switch (this.argumentList.argumentTypes[i])

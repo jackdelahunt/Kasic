@@ -22,7 +22,7 @@ namespace kasic.Parsing
 
         public Result<List<ParserToken>, KasicError> Parse(Context context)
         {
-            var parserTokens = new List<ParserToken>();
+            var parserTokens = new List<ParserToken>(15);
             for (int i = 0; i < Tokens.Count; i++)
             {
                 var token = Tokens[i];
@@ -139,12 +139,12 @@ namespace kasic.Parsing
 
         private Result<List<object>, KasicError> BuildArguments(Context context, List<string> args, ArgumentList argumentList)
         {
-            var returningObject = new List<object>();
+            var returningObject = new List<object>(10);
             // TODO: this assumes the set command is ran on another line meaning if set is ran on this line this fails
             for (int i = 0; i < args.Count; i++)
             {
                 var arg = args[i];
-                if (arg.StartsWith("*"))
+                if (arg[0].Equals('*'))
                 {
                     var argumentType = argumentList.argumentTypes[i];
                     var result = Heap.Reference(context, arg.Substring(1));

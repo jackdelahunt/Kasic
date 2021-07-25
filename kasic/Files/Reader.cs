@@ -69,7 +69,7 @@ namespace kasic.Files
 
         private bool ValidLine(string line)
         {
-            return !(line.StartsWith(">") || line.StartsWith("#") || String.IsNullOrEmpty(line));
+            return !(String.IsNullOrEmpty(line) || line[0].Equals('>') || line[0].Equals('#'));
         }
         
     }
