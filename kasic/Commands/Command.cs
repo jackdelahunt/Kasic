@@ -9,17 +9,14 @@ namespace kasic.Commands
     public abstract class Command
     {
         public string Name;
-        public ArgObject ArgObject;
-        public List<string> Flags;
         public CommandSettings CommandSettings;
 
         public Command(string name)
         {
             Name = name;
-            Flags = new List<string>();
         }
         
-        public virtual Result<IReturnObject, KasicError> Run(Context context)
+        public virtual Result<IReturnObject, KasicError> Run(Context context, ArgObject argObject, List<string> flags)
         {
             throw new NotImplementedException("Command command is not valid");
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using kasic.Commands;
 using kasic.Kasic;
 using kasic.Logging;
+using kasic.Parsing;
 using OperationResult;
 using String = System.String;
 
@@ -10,26 +11,26 @@ namespace kasic
 {
     public class Runtime
     {
-        public List<Command> Commands { get; private set; }
+        public List<ParserToken> Tokens { get; private set; }
         
-        public Runtime(List<Command> commands)
+        public Runtime(List<ParserToken> tokens)
         {
-            Commands = commands;
+            this.Tokens = tokens;
         }
 
         public Result<string, KasicError> Run(Context context)
         {
             IReturnObject lastOut = null;
-            foreach (var command in Commands)
+            foreach (var token in Tokens)
             {
-                context.Command = command;
+                context.Command = token.Command;
                 
                 if (lastOut != null)
                 {
-                    command.ArgObject.PipeReturn(context, lastOut);
+                    token.ArgObject.PipeReturn(context, lastOut);
                 }
 
-                var result = command.Run(context);
+                var result = token.Command.Run(context, token.ArgObject, token.Flags);
                 if (result.IsError)
                 {
                     return Helpers.Error(result.Error);

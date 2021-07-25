@@ -24,10 +24,10 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<IReturnObject, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context, ArgObject argObject, List<string> flags)
         {
-            var num1 = ArgObject.AsNumber(0);
-            var num2 = ArgObject.AsNumber(1);
+            var num1 = argObject.AsNumber(0);
+            var num2 = argObject.AsNumber(1);
             return new ReturnObject(this, num1 < num2);
         }
     }

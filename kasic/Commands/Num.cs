@@ -24,9 +24,9 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<IReturnObject, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context, ArgObject argObject, List<string> flags)
         {
-            var arg = ArgObject.AsAny(0);
+            var arg = argObject.AsAny(0);
             var result = Types.ToNumber(context, arg);
             if (result.IsError)
             {

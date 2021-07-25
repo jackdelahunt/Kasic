@@ -25,10 +25,10 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<IReturnObject, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context, ArgObject argObject, List<string> flags)
         {
-            var name = ArgObject.AsString(0);
-            var value = ArgObject.AsString(1);
+            var name = argObject.AsString(0);
+            var value = argObject.AsString(1);
             Heap.Push(name, value, KasicType.STRING);
             return new ReturnObject(this, value);
         }

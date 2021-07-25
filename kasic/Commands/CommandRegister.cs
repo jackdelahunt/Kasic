@@ -32,19 +32,16 @@ namespace kasic.Commands
         
         public static Result<Command, KasicError> FindCommand(Context context, string name)
         {
-            commands.TryGetValue(name, out var command);
-            var type = command?.GetType();
-
-            if (type == null)
+            if (commands.TryGetValue(name, out var command))
             {
-                return Helpers.Error(new KasicError
-                {
-                    Context = context,
-                    Message = $"Cannot find command with the name: {name}"
-                });
+                return Helpers.Ok(command);
             }
-
-            return Helpers.Ok(Activator.CreateInstance(type) as Command);
+            
+            return Helpers.Error(new KasicError
+            {
+                Context = context,
+                Message = $"Cannot find command with the name: {name}"
+            });
         }
 
         private static void RegisterCommand(Command command)

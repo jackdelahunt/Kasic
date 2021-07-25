@@ -23,10 +23,10 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<IReturnObject, KasicError> Run(Context context)
+        public override Result<IReturnObject, KasicError> Run(Context context, ArgObject argObject, List<string> flags)
         {
-            var arg = ArgObject.AsAny(0);
-            if (Flags.Contains("-c"))
+            var arg = argObject.AsAny(0);
+            if (flags.Contains("-c"))
             {
                 Logger.Log(arg);
             }

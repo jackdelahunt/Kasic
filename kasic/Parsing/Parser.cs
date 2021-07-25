@@ -20,11 +20,12 @@ namespace kasic.Parsing
             Tokens = tokens;
         }
 
-        public Result<List<Command>, KasicError> Parse(Context context)
+        public Result<List<ParserToken>, KasicError> Parse(Context context)
         {
-            var commands = new List<Command>();
-            foreach (var token in Tokens)
+            var parserTokens = new List<ParserToken>();
+            for (int i = 0; i < Tokens.Count; i++)
             {
+                var token = Tokens[i];
                 // Find the command based on the token name
                 var registerResult = CommandRegister.FindCommand(context, token.Name);
                 if (registerResult.IsError)
@@ -48,42 +49,39 @@ namespace kasic.Parsing
                     return Helpers.Error(argumentResult.Error);
                 }
 
-
-                foundCommand.ArgObject = argumentResult.Value;
-                foundCommand.Flags = token.Flags;
-                commands.Add(foundCommand);
-            }
-
-            for (int i = 0; i < commands.Count; i++)
-            {
-                var command = commands[i];
                 if (i == 0)
                 {
-                    var status = ParseFirst(context, command);
+                    var status = ParseFirst(context, foundCommand, argumentResult.Value);
                     if (status.IsError)
                     {
                         return Helpers.Error(status.Error);
                     }
-                    continue;
                 }
-                
-                // command always has one before here
-                var beforeCommand = commands[i - 1];
-                var parseCommandStatus = ParseCommand(context, beforeCommand, command);
-                if (parseCommandStatus.IsError)
+                else
                 {
-                    return Helpers.Error(parseCommandStatus.Error);
+                    var lastParserToken = parserTokens[i - 1];
+                    var parseCommandStatus = ParseCommand(context, lastParserToken.Command, foundCommand, argumentResult.Value);
+                    if (parseCommandStatus.IsError)
+                    {
+                        return Helpers.Error(parseCommandStatus.Error);
+                    }
                 }
-            }
 
-            return commands;
+                parserTokens.Add(new ParserToken
+                {
+                    Command = foundCommand,
+                    ArgObject = argumentResult.Value,
+                    Flags = token.Flags
+                });
+            }
+            return parserTokens;
         }
 
-        private Status<KasicError> ParseCommand(Context context, Command before, Command next)
+        private Status<KasicError> ParseCommand(Context context, Command before, Command next, ArgObject nextCommandArgs)
         {
             var returningType = before.CommandSettings.ReturnType;
             var firstInputType = next.CommandSettings.ArgumentList.argumentTypes[0];
-            var awaitingInputType = next.CommandSettings.ArgumentList.argumentTypes[next.ArgObject.Count];
+            var awaitingInputType = next.CommandSettings.ArgumentList.argumentTypes[nextCommandArgs.Count];
             
             
             
@@ -107,7 +105,7 @@ namespace kasic.Parsing
                     });
             }
             
-            int nextTotalArgAmount = next.ArgObject.Count + 1;
+            int nextTotalArgAmount = nextCommandArgs.Count + 1;
             if (nextTotalArgAmount > next.CommandSettings.MaxArgs ||
                 nextTotalArgAmount < next.CommandSettings.MinArgs)
             {
@@ -122,9 +120,9 @@ namespace kasic.Parsing
             return Helpers.Ok();
         }
 
-        private Status<KasicError> ParseFirst(Context context, Command command)
+        private Status<KasicError> ParseFirst(Context context, Command command, ArgObject commandsArgs)
         {
-            int argCount = command.ArgObject.Count;
+            int argCount = commandsArgs.Count;
             if (argCount > command.CommandSettings.MaxArgs ||
                 argCount < command.CommandSettings.MinArgs)
             {
