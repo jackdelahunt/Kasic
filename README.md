@@ -45,9 +45,20 @@ goto loop
 ## Speed Comparision
 See [here](https://github.com/jackdelahunt/Kasic/tree/main/kasic/Examples/Speed) for the code for each language.
 
+
+### Kasic
+|                | Speed(ms) |
+| -------------- | --------- |
+| 2021-07-24     | 4820      |
+| 2021-07-25     | 3560      |
+
+
+
+
+### In comparision
 | Language | Speed(ms) |
 | -------- | --------- |
-| Kasic | 4820 |
-| Python | 100 |
-| Rust | 1 |
-| C++ | <1 |
+| Python   | 100       |
+| Java     | 6         |
+| Rust     | 1         |
+| C++      | <1        |
