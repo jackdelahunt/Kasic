@@ -40,7 +40,7 @@ namespace kasic.Commands
                     return Helpers.Error(ifGotoResult.Error);
                 }
                 
-                context.Reader.MovePointer(ifGotoResult.Value);
+                context.LineNumber = ifGotoResult.Value;
             }
             else
             {
@@ -53,7 +53,7 @@ namespace kasic.Commands
                         return Helpers.Error(elseGotoResult.Error);
                     }
                 
-                    context.Reader.MovePointer(elseGotoResult.Value);
+                    context.LineNumber = elseGotoResult.Value;
                 }
             }
 

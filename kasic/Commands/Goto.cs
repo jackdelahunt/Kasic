@@ -33,7 +33,7 @@ namespace kasic.Commands
                 return Helpers.Error(result.Error);
             }
 
-            context.Reader.MovePointer(result.Value);
+            context.LineNumber = result.Value;
             return new ReturnObject(this);
         }
     }

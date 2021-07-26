@@ -18,9 +18,9 @@ namespace kasic
                 Headless(new Context
                 {
                     Command = null,
-                    Reader = new Reader(args[0]),
-                    RuntimeMode = RuntimeMode.HEADLESS
-                });
+                    RuntimeMode = RuntimeMode.HEADLESS,
+                    LineNumber = 0,
+                }, args[0]);
             }
             else
             {
@@ -28,38 +28,44 @@ namespace kasic
                 {
                     Command = null,
                     Reader = new Reader(),
-                    RuntimeMode = RuntimeMode.COMMANDLINE
+                    RuntimeMode = RuntimeMode.COMMANDLINE,
+                    LineNumber = 0,
                 });
             }
         }
         
-        public static List<KasicError> Headless(Context context)
+        public static Status<KasicError> Headless(Context context, string filePath)
         {
-            var errors = new List<KasicError>();
-            bool running = true;
-            while (running)
+            context.Region = KasicRegion.LEXER;
+            var lexerResult = new Lexer().Lex(context, filePath);
+            if (lexerResult.IsError)
             {
-                var readerResult = context.Reader.ReadLine();
-                if (readerResult.IsError)
+                return Helpers.Error(lexerResult.Error);
+            }
+
+            var controller = new Controller(lexerResult.Value);
+
+            while (!controller.IsEOF(context))
+            {
+                context.Region = KasicRegion.PARSER;
+                var parser = new Parser(controller.GetLine(context));
+                var parserResult = parser.Parse(context);
+                if (parserResult.IsError)
                 {
-                    return errors;
+                    return Helpers.Error(parserResult.Error);
                 }
 
-                if (readerResult.Value == Reader.EOF)
+                context.Region = KasicRegion.RUNTIME;
+                var runtime = new Runtime(parserResult.Value);
+                var runtimeResult = runtime.Run(context);
+                if (runtimeResult.IsError)
                 {
-                    running = false;
-                    continue;
-                }
-
-                var runnerResult = RunLine(context, readerResult.Value);
-                if (runnerResult.IsError)
-                {
-                    Logger.LogError(runnerResult.Error);
-                    errors.Add(runnerResult.Error);
+                    return Helpers.Error(runtimeResult.Error);
                 }
             }
 
-            return errors;
+
+            return Helpers.Ok();
         }
 
         public static void CommandLine(Context context)
@@ -68,7 +74,7 @@ namespace kasic
             {
                 Console.Write(">>> ");
                 string input = Console.ReadLine().Trim();
-                var result = RunLine(context, input);
+                var result = RunSingleLine(context, input);
                 if (result.IsError)
                 {
                     Logger.LogError(result.Error);
@@ -76,18 +82,17 @@ namespace kasic
             }
         }
 
-        public static Result<string, KasicError> RunLine(Context context, string line)
+        public static Result<string, KasicError> RunSingleLine(Context context, string line)
         {
             context.Region = KasicRegion.LEXER;
-            var lexer = new Lexer(line);
-            var lexerResult = lexer.Lex(context);
+            var lexerResult = new Lexer().Lex(context, line);
             if (lexerResult.IsError)
             {
                 return Helpers.Error(lexerResult.Error);
             }
                
             context.Region = KasicRegion.PARSER;
-            var parser = new Parser(lexerResult.Value);
+            var parser = new Parser(lexerResult.Value[0]);
             var parserResult = parser.Parse(context);
             if (parserResult.IsError)
             {

@@ -45,6 +45,7 @@ namespace kasic
                 if (!string.IsNullOrEmpty(output))
                 {
                     Logger.Logln(output);
+                    return Helpers.Ok(output);
                 }
             }
 

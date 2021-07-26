@@ -2,23 +2,69 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using kasic.Kasic;
+using kasic.Memory;
 using OperationResult;
 
 namespace kasic.Lexing
 {
     public class Lexer
     {
-        
-        public string Input { get; private set; }
-        
-        public Lexer(string input)
+        public Result<List<List<CommandToken>>, KasicError> Lex(Context context, string input)
         {
-            Input = input;
+            if (context.RuntimeMode == RuntimeMode.HEADLESS)
+                return LexFile(context, input);
+
+            var lexLineResult = LexLine(context, input);
+            if (lexLineResult.IsError)
+            {
+                return Helpers.Error(lexLineResult.Error);
+            }
+
+            var list = new List<List<CommandToken>> {lexLineResult.Value};
+            return Helpers.Ok(list);
+        }
+        
+        public Result<List<List<CommandToken>>, KasicError> LexFile(Context context, string fileName)
+        {
+            var listOfCommandTokenLists = new List<List<CommandToken>>(); // best name
+            var fileLines = System.IO.File.ReadAllLines(fileName);
+            for (int i = 0; i < fileLines.Length; i++)
+            {
+                var line = fileLines[i].Trim();
+                if (string.IsNullOrEmpty(line) || string.IsNullOrWhiteSpace(line))
+                {
+                    listOfCommandTokenLists.Add(null);
+                    continue;
+                }
+
+                switch (fileLines[i][0])
+                {
+                    case '#': 
+                        listOfCommandTokenLists.Add(null);
+                        break;
+                    case '>': 
+                        var scopeName = line.Substring(1).Trim().Split(" ")[0];
+                        Scope.RegisterGotoScope(scopeName, i); 
+                        listOfCommandTokenLists.Add(null);
+                        break;
+                    default:
+                        var lexLineResult = LexLine(context, line);
+                        if (lexLineResult.IsError)
+                        {
+                            return Helpers.Error(lexLineResult.Error);
+                        }
+                        listOfCommandTokenLists.Add(lexLineResult.Value);
+                        break;
+                        
+                }
+            }
+
+            return listOfCommandTokenLists;
         }
 
-        public Result<List<CommandToken>, KasicError> Lex(Context context)
+        public Result<List<CommandToken>, KasicError> LexLine(Context context, string line)
         {
-            var splits = Input.Trim().Split(" | ");
+            var splits = line.Trim().Split(" | ");
             var commandTokens = new List<CommandToken>(10);
             foreach (var split in splits)
             {
@@ -31,8 +77,9 @@ namespace kasic.Lexing
                 commandTokens.Add(lexResult.Value);
             }
 
-            return commandTokens;
+            return Helpers.Ok(commandTokens);
         }
+
 
         private Result<CommandToken, KasicError> LexCommand(Context context, string split)
         {

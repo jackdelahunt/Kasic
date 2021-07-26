@@ -20,7 +20,7 @@ namespace E2E.Tests
         
         public void SingleLineTest(string commandInput, string output)
         {
-            var result = Program.RunLine(new Context
+            var result = Program.RunSingleLine(new Context
             {
                 Command = null,
                 Reader = null,

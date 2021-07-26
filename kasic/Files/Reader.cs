@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using kasic.Kasic;
+using kasic.Lexing;
 using kasic.Memory;
 using OperationResult;
 
@@ -10,6 +12,7 @@ namespace kasic.Files
         public static readonly string EOF = "eof";
         public string Path { get; private set; }
         private string[] lines;
+        private List<List<CommandToken>> FileTokens; 
         public int LineNumber { get; private set; }
 
         public Reader()
@@ -17,7 +20,6 @@ namespace kasic.Files
             Path = "";
             LineNumber = 0;
             lines = new string[0];
-            BuildScopes();
         }
         
         public Reader(string path)
@@ -25,7 +27,7 @@ namespace kasic.Files
             Path = path;
             LineNumber = 0;
             lines = System.IO.File.ReadAllLines(path);
-            BuildScopes();
+            Build();
         }
 
         public Result<string, KasicError> ReadLine()
@@ -54,7 +56,12 @@ namespace kasic.Files
             return false;
         }
 
-        private void BuildScopes()
+        private void Build()
+        {
+            
+        }
+
+        private void BuildScope(int lineNumber)
         {
             for (int i = 0; i < lines.Length; i++)
             {

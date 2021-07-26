@@ -10,6 +10,7 @@ namespace kasic.Kasic
         public Reader Reader;
         public Command Command;
         public KasicRegion Region;
+        public int LineNumber;
     }
 
     public enum RuntimeMode
