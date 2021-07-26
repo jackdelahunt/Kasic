@@ -52,6 +52,8 @@ See [here](https://github.com/jackdelahunt/Kasic/tree/main/kasic/Examples/Speed)
 | 2021-07-24     | 4820      |
 | 2021-07-25     | 3560      |
 | 2021-07-26     | 2970      |
+| 2021-07-27     | 1760      |
+
 
 
 
