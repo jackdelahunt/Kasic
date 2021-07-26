@@ -24,13 +24,13 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<IReturnObject, KasicError> Run(Context context, ArgObject argObject, List<string> flags)
+        public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
-            double total = argObject.AsNumber(0);
+            double total = arguments.AsNumber(0);
             
-            for (int i = 1; i < argObject.Count; i++)
+            for (int i = 1; i < arguments.Count; i++)
             {
-                var arg = argObject.AsNumber(i);
+                var arg = arguments.AsNumber(i);
                 total *= arg;
             }
 

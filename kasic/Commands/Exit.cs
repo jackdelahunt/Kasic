@@ -23,7 +23,7 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<IReturnObject, KasicError> Run(Context context, ArgObject argObject, List<string> flags)
+        public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
             Environment.Exit(0);
             return new ReturnObject(this);

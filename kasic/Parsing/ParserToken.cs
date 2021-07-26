@@ -7,7 +7,7 @@ namespace kasic.Parsing
     public struct ParserToken
     {
         public Command Command;
-        public ArgObject ArgObject;
+        public Arguments Arguments;
         public List<string> Flags;
     }
 }

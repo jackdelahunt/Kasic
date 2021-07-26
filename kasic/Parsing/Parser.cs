@@ -43,7 +43,7 @@ namespace kasic.Parsing
                 }
                 
                 // Build arg object from built arguments
-                var argumentResult = ArgObject.New(context, builtArgumentsResult.Value, foundCommand.CommandSettings.ArgumentList);
+                var argumentResult = Arguments.New(context, builtArgumentsResult.Value, foundCommand.CommandSettings.ArgumentList);
                 if (argumentResult.IsError)
                 {
                     return Helpers.Error(argumentResult.Error);
@@ -70,14 +70,14 @@ namespace kasic.Parsing
                 parserTokens.Add(new ParserToken
                 {
                     Command = foundCommand,
-                    ArgObject = argumentResult.Value,
+                    Arguments = argumentResult.Value,
                     Flags = token.Flags
                 });
             }
             return parserTokens;
         }
 
-        private Status<KasicError> ParseCommand(Context context, Command before, Command next, ArgObject nextCommandArgs)
+        private Status<KasicError> ParseCommand(Context context, Command before, Command next, Arguments nextCommandArgs)
         {
             var returningType = before.CommandSettings.ReturnType;
             var firstInputType = next.CommandSettings.ArgumentList.argumentTypes[0];
@@ -120,7 +120,7 @@ namespace kasic.Parsing
             return Helpers.Ok();
         }
 
-        private Status<KasicError> ParseFirst(Context context, Command command, ArgObject commandsArgs)
+        private Status<KasicError> ParseFirst(Context context, Command command, Arguments commandsArgs)
         {
             int argCount = commandsArgs.Count;
             if (argCount > command.CommandSettings.MaxArgs ||

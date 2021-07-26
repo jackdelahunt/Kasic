@@ -16,7 +16,7 @@ namespace kasic.Commands
             Name = name;
         }
         
-        public virtual Result<IReturnObject, KasicError> Run(Context context, ArgObject argObject, List<string> flags)
+        public virtual Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
             throw new NotImplementedException("Command command is not valid");
         }

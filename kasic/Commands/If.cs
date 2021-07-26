@@ -27,10 +27,10 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<IReturnObject, KasicError> Run(Context context, ArgObject argObject, List<string> flags)
+        public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
-            var condition = argObject.AsBool(0);
-            var ifResult = argObject.AsString(1);
+            var condition = arguments.AsBool(0);
+            var ifResult = arguments.AsString(1);
 
             if (condition)
             {
@@ -44,9 +44,9 @@ namespace kasic.Commands
             }
             else
             {
-                if (argObject.Count > 2)
+                if (arguments.Count > 2)
                 {
-                    var elseResult = argObject.AsString(2);
+                    var elseResult = arguments.AsString(2);
                     var elseGotoResult = Scope.FindGotoScope(context, elseResult);
                     if (elseGotoResult.IsError)
                     {

@@ -6,13 +6,13 @@ using OperationResult;
 
 namespace kasic.Kasic
 {
-    public class ArgObject
+    public class Arguments
     {
         private ArgumentList argumentList;
         private List<object> arguments;
         public int Count => arguments.Count;
 
-        public ArgObject(List<object> arguments, ArgumentList argumentList)
+        public Arguments(List<object> arguments, ArgumentList argumentList)
         {
             this.argumentList = argumentList;
             this.arguments = arguments;
@@ -52,9 +52,9 @@ namespace kasic.Kasic
             return Helpers.Ok();
         }
 
-        public static Result<ArgObject, KasicError> New(Context context, List<object> arguments, ArgumentList argumentList)
+        public static Result<Arguments, KasicError> New(Context context, List<object> arguments, ArgumentList argumentList)
         {
-            var arg = new ArgObject(arguments, argumentList);
+            var arg = new Arguments(arguments, argumentList);
             var buildResult = arg.Build(context);
             if (buildResult.IsError)
             {

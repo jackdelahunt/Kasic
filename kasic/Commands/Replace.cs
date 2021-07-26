@@ -26,11 +26,11 @@ namespace kasic.Commands
             };
         }
 
-        public override Result<IReturnObject, KasicError> Run(Context context, ArgObject argObject, List<string> flags)
+        public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
-            var oldValue = argObject.AsString(0);
-            var newValue = argObject.AsString(1);
-            var text = argObject.AsString(2);
+            var oldValue = arguments.AsString(0);
+            var newValue = arguments.AsString(1);
+            var text = arguments.AsString(2);
 
             text = text.Replace(oldValue, newValue, flags.Contains("-i"), CultureInfo.InvariantCulture);
 

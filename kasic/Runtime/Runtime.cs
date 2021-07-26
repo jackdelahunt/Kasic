@@ -27,10 +27,10 @@ namespace kasic
                 
                 if (lastOut != null)
                 {
-                    token.ArgObject.PipeReturn(context, lastOut);
+                    token.Arguments.PipeReturn(context, lastOut);
                 }
 
-                var result = token.Command.Run(context, token.ArgObject, token.Flags);
+                var result = token.Command.Run(context, token.Arguments, token.Flags);
                 if (result.IsError)
                 {
                     return Helpers.Error(result.Error);
