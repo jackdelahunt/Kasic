@@ -23,7 +23,6 @@ namespace E2E.Tests
             var result = Program.RunSingleLine(new Context
             {
                 Command = null,
-                Reader = null,
                 RuntimeMode = RuntimeMode.COMMANDLINE
             }, commandInput);
             

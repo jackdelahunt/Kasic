@@ -7,7 +7,6 @@ namespace kasic.Kasic
     public class Context
     {
         public RuntimeMode RuntimeMode;
-        public Reader Reader;
         public Command Command;
         public KasicRegion Region;
         public int LineNumber;
@@ -53,7 +52,7 @@ namespace kasic.Kasic
 
             StringBuilder builder = new StringBuilder();
             
-            builder.Append($"[{this.Context.Reader.LineNumber}] ");
+            builder.Append($"[{this.Context.LineNumber}] ");
             if (region != "")
             {
                 builder.Append($"{region} ");
