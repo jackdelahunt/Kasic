@@ -14,13 +14,11 @@ namespace kasic.Memory
 
         public static Status<KasicError> Push(string name, object data, KasicType type)
         {
-            if (heap.ContainsKey(name))
+            if (!heap.TryAdd(name, new Tuple<object, KasicType>(data, type)))
             {
-                // TODO: this looks dumb
-                heap.Remove(name);
+                heap[name] = new Tuple<object, KasicType>(data, type);
             }
 
-            heap.Add(name, new Tuple<object, KasicType>(data, type));
             return Helpers.Ok();
         }
         
