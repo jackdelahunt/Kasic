@@ -55,10 +55,6 @@ See [here](https://github.com/jackdelahunt/Kasic/tree/main/kasic/Examples/Speed)
 | 2021-07-27     | 1760      |
 
 
-
-
-
-
 ### In comparision
 | Language | Speed(ms) |
 | -------- | --------- |
@@ -66,3 +62,6 @@ See [here](https://github.com/jackdelahunt/Kasic/tree/main/kasic/Examples/Speed)
 | Java     | 6         |
 | Rust     | 1         |
 | C++      | <1        |
+
+### Language iterations per second compared 
+![Chart](Resources/speed_chart.png)
