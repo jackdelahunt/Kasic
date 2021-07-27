@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using kasic.Kasic;
 using kasic.Logging;
@@ -29,8 +30,14 @@ namespace kasic.Commands
         {
             double total = 0;
             for (int i = 0; i < arguments.Count; i++)
-            {
-                total += arguments.AsNumber(i);
+            { 
+                var result = arguments.AsNumber(context, i);
+                if (result.IsError)
+                {
+                    return Helpers.Error(result.Error);
+                }
+
+                total += result.Value;
             }
             return new ReturnObject(this, total);
         }

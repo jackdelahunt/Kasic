@@ -28,13 +28,27 @@ namespace kasic.Commands
 
         public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
-            var oldValue = arguments.AsString(0);
-            var newValue = arguments.AsString(1);
-            var text = arguments.AsString(2);
+            var oldValue = arguments.AsString(context, 0);
+            if (oldValue.IsError)
+            {
+                return Helpers.Error(oldValue.Error);
+            }
+            
+            var newValue = arguments.AsString(context, 1);
+            if (newValue.IsError)
+            {
+                return Helpers.Error(newValue.Error);
+            }
+            
+            var text = arguments.AsString(context, 2);
+            if (text.IsError)
+            {
+                return Helpers.Error(text.Error);
+            }
 
-            text = text.Replace(oldValue, newValue, flags.Contains("-i"), CultureInfo.InvariantCulture);
+            var replacedText = text.Value.Replace(oldValue.Value, newValue.Value, flags.Contains("-i"), CultureInfo.InvariantCulture);
 
-            return new ReturnObject(this, text);
+            return new ReturnObject(this, replacedText);
         }
     }
 }

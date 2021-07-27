@@ -27,10 +27,20 @@ namespace kasic.Commands
 
         public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
-            var name = arguments.AsString(0);
-            var value = arguments.AsNumber(1);
-            Heap.Push(name, value, KasicType.NUMBER);
-            return new ReturnObject(this, value);
+            var name = arguments.AsString(context, 0);
+            if (name.IsError)
+            {
+                return Helpers.Error(name.Error);
+            }
+            
+            var value = arguments.AsNumber(context, 1);
+            if (value.IsError)
+            {
+                return Helpers.Error(value.Error);
+            }
+            
+            Heap.Push(name.Value, value.Value, KasicType.NUMBER);
+            return new ReturnObject(this, value.Value);
         }
     }
 }

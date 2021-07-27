@@ -9,53 +9,59 @@ namespace kasic.Kasic
     public class Arguments
     {
         private ArgumentList argumentList;
-        private List<object> arguments;
-        public int Count => arguments.Count;
+        private List<KasicObject> argumentObjects;
+        public int Count => argumentObjects.Count;
 
-        public Arguments(List<object> arguments, ArgumentList argumentList)
+        public Arguments(ArgumentList argumentList)
         {
             this.argumentList = argumentList;
-            this.arguments = arguments;
+            this.argumentObjects = new List<KasicObject>(5);
         }
 
         /*
          * Verifies arguments match the argument list given
          */
-        public Status<KasicError> Build(Context context)
+        public Status<KasicError> Build(Context context, List<object> arguments)
         {
-            List<object> builtArguments = new List<object>(10);
-            for (int i = 0; i < this.arguments.Count; i++)
+            for (int i = 0; i < arguments.Count; i++)
             {
+                if (IsFieldDynamic(arguments[i], out var name))
+                {
+                    argumentObjects.Add(new KasicObject(name, argumentList.argumentTypes[i], true));
+                    continue;
+                }
+                
                 switch (this.argumentList.argumentTypes[i])
                 {
                     case KasicType.NUMBER:
-                        var toNumberResult = ToNumber(context, this.arguments[i]);
+                        var toNumberResult = ToNumber(context, arguments[i]);
                         if (toNumberResult.IsError)
                         {
                             return Helpers.Error(toNumberResult.Error);
                         }
-                        builtArguments.Add(toNumberResult.Value); break;
+                        argumentObjects.Add(new KasicObject(toNumberResult.Value, argumentList.argumentTypes[i]));
+                        break;
                     case KasicType.BOOL:
-                        var toBoolResult = ToBool(context, this.arguments[i]);
+                        var toBoolResult = ToBool(context, arguments[i]);
                         if (toBoolResult.IsError)
                         {
                             return Helpers.Error(toBoolResult.Error);
                         }
-                        builtArguments.Add(toBoolResult.Value); break;
+                        argumentObjects.Add(new KasicObject(toBoolResult.Value, argumentList.argumentTypes[i]));
+                        break;
                     default:
-                        builtArguments.Add(this.arguments[i]); break;
+                        argumentObjects.Add(new KasicObject(arguments[i], argumentList.argumentTypes[i]));
+                        break;
                 }
             }
-
-            this.arguments = builtArguments;
-
+            
             return Helpers.Ok();
         }
 
         public static Result<Arguments, KasicError> New(Context context, List<object> arguments, ArgumentList argumentList)
         {
-            var arg = new Arguments(arguments, argumentList);
-            var buildResult = arg.Build(context);
+            var arg = new Arguments(argumentList);
+            var buildResult = arg.Build(context, arguments);
             if (buildResult.IsError)
             {
                 return Helpers.Error(buildResult.Error);
@@ -63,77 +69,82 @@ namespace kasic.Kasic
             return arg;
         }
 
-        public double AsNumber(int index)
+        public Result<double, KasicError> AsNumber(Context context, int index)
         {
-            if (this.arguments[index] is double @return)
-                return @return;
-            
-            Panic(this.arguments[index]);
-            return 0;
+            var result = argumentObjects[index].GetValue(context);
+            if (result.IsError)
+            {
+                return Helpers.Error(result.Error);
+            }
+
+            if (result.Value is double @double)
+            {
+                return Helpers.Ok(@double);
+            }
+
+            throw new Exception($"Used as number for non-number value {result.Value.GetType()}");
         }
         
-        public bool AsBool(int index)
+        public Result<bool, KasicError> AsBool(Context context, int index)
         {
-            if (this.arguments[index] is bool @return)
-                return @return;
-            
-            Panic(this.arguments[index]);
-            return false;
+            var result = argumentObjects[index].GetValue(context);
+            if (result.IsError)
+            {
+                return Helpers.Error(result.Error);
+            }
+
+            if (result.Value is bool @bool)
+            {
+                return Helpers.Ok(@bool);
+            }
+
+            throw new Exception($"Used as bool for non-bool value {result.Value.GetType()}");
         }
         
-        public string AsString(int index)
+        public Result<string, KasicError> AsString(Context context, int index)
         {
-            if (this.arguments[index] is string @return)
-                return @return;
-            
-            Panic(this.arguments[index]);
-            return "";
+            var result = argumentObjects[index].GetValue(context);
+            if (result.IsError)
+            {
+                return Helpers.Error(result.Error);
+            }
+
+            if (result.Value is string @string)
+            {
+                return Helpers.Ok(@string);
+            }
+
+            throw new Exception($"Used as string for non-string value {result.Value.GetType()}");
         }
         
-        public string AsAny(int index)
+        public Result<string, KasicError> AsAny(Context context, int index)
         {
-            return this.arguments[index].ToString();
+            var result = argumentObjects[index].GetValue(context);
+            if (result.IsError)
+            {
+                return Helpers.Error(result.Error);
+            }
+
+            return Helpers.Ok(result.Value.ToString());
         }
 
         public Status<KasicError> PipeReturn(Context context, IReturnObject returnObject)
         {
-            switch(this.argumentList.argumentTypes[this.arguments.Count])
+            // TODO: make the type check here maybe?
+            argumentObjects.Add(returnObject.AsKasicObject());
+            return Helpers.Ok();
+        }
+
+        private bool IsFieldDynamic(object value, out string? name)
+        {
+            if (value is string @string && @string[0] == '*')
             {
-                case KasicType.NUMBER:
-                    return AddAsNumber(context, returnObject.AsNumber()); break;
-                case KasicType.BOOL:
-                    return AddAsBool(context, returnObject.AsBool()); break;
-                case KasicType.ANY:
-                    return AddAsAny(context, returnObject.AsAny()); break;
-                case KasicType.STRING:
-                    return AddAsString(context, returnObject.AsString()); break;
-                default:
-                    throw new ArgumentException("Tried to pipe VOID");
-            };
-        }
+                name = @string.Substring(1);
+                return true;
+            }
 
-        private Status<KasicError> AddAsAny(Context context, string str)
-        {
-            this.arguments.Add(str);
-            return Helpers.Ok();
-        }
-
-        private Status<KasicError> AddAsString(Context context, string any)
-        {
-            this.arguments.Add(any);
-            return Helpers.Ok();
-        }
-
-        private Status<KasicError> AddAsNumber(Context context, double number)
-        {
-            this.arguments.Add(number);
-            return Helpers.Ok();
-        }
-        
-        private Status<KasicError> AddAsBool(Context context, bool value)
-        {
-            this.arguments.Add(value);
-            return Helpers.Ok();
+            name = null;
+            return false;
         }
 
         private Result<double, KasicError> ToNumber(Context context, object arg)

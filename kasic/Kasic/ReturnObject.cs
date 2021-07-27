@@ -25,86 +25,30 @@ namespace kasic.Kasic
             }
         }
 
-        public ReturnObject(Command command, double toReturn)
+        public ReturnObject(Command command, object toReturn)
         {
             this.command = command;
-            switch (command.CommandSettings.ReturnType)
+            switch (Type.GetTypeCode(toReturn.GetType()))
             {
-                case KasicType.NUMBER:
+                case TypeCode.Double:
+                    if (command.CommandSettings.ReturnType != KasicType.NUMBER)
+                        Panic(toReturn);
                     this.toReturn = toReturn;
                     break;
-                default:
-                    Panic(toReturn); break;
-            }
-        }
-        
-        public ReturnObject(Command command, bool toReturn)
-        {
-            this.command = command;
-            switch (command.CommandSettings.ReturnType)
-            {
-                case KasicType.BOOL:
+                case TypeCode.Boolean:
+                    if (command.CommandSettings.ReturnType != KasicType.BOOL)
+                        Panic(toReturn);
                     this.toReturn = toReturn;
                     break;
-                default:
-                    Panic(toReturn); break;
-            }
-        }
-        
-        public ReturnObject(Command command, string toReturn)
-        {
-            this.command = command;
-            switch (command.CommandSettings.ReturnType)
-            {
-                case KasicType.ANY:
-                case KasicType.STRING:
+                default: // string
                     this.toReturn = toReturn;
                     break;
-                default:
-                    Panic(toReturn); break;
             }
         }
 
-        public double AsNumber()
+        public KasicObject AsKasicObject()
         {
-            if (toReturn is double)
-                return (double) toReturn;
-            
-            Panic(toReturn);
-            return 0;
-        }
-
-        public bool AsBool()
-        {
-            if (toReturn is bool)
-                return (bool) toReturn;
-            
-            Panic(toReturn);
-            return false;
-        }
-
-        public string AsString()
-        {
-            if (toReturn is string)
-                return (string) toReturn;
-            
-            Panic(toReturn);
-            return "";
-        }
-
-        public string AsAny()
-        {
-            // as any casts the value to a string while
-            // as string expects the value to be a string
-            try
-            {
-                return toReturn.ToString();
-            }
-            catch
-            {
-                Panic(toReturn);
-                return "";
-            }
+            return new KasicObject(toReturn, command.CommandSettings.ReturnType);
         }
 
         public override string ToString()

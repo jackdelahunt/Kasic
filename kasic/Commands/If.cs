@@ -29,12 +29,21 @@ namespace kasic.Commands
 
         public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
-            var condition = arguments.AsBool(0);
-            var ifResult = arguments.AsString(1);
-
-            if (condition)
+            var condition = arguments.AsBool(context, 0);
+            if (condition.IsError)
             {
-                var ifGotoResult = Scope.FindGotoScope(context, ifResult);
+                return Helpers.Error(condition.Error);
+            }
+            
+            var ifResult = arguments.AsString(context, 1);
+            if (ifResult.IsError)
+            {
+                return Helpers.Error(ifResult.Error);
+            }
+
+            if (condition.Value)
+            {
+                var ifGotoResult = Scope.FindGotoScope(context, ifResult.Value);
                 if (ifGotoResult.IsError)
                 {
                     return Helpers.Error(ifGotoResult.Error);
@@ -46,8 +55,13 @@ namespace kasic.Commands
             {
                 if (arguments.Count > 2)
                 {
-                    var elseResult = arguments.AsString(2);
-                    var elseGotoResult = Scope.FindGotoScope(context, elseResult);
+                    var elseResult = arguments.AsString(context, 2);
+                    if (elseResult.IsError)
+                    {
+                        return Helpers.Error(elseResult.Error);
+                    }
+                    
+                    var elseGotoResult = Scope.FindGotoScope(context, elseResult.Value);
                     if (elseGotoResult.IsError)
                     {
                         return Helpers.Error(elseGotoResult.Error);

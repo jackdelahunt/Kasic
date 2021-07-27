@@ -26,8 +26,13 @@ namespace kasic.Commands
 
         public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
-            var arg = arguments.AsString(0);
-            var result = Scope.FindGotoScope(context, arg);
+            var arg = arguments.AsString(context, 0);
+            if (arg.IsError)
+            {
+                return Helpers.Error(arg.Error);
+            }
+            
+            var result = Scope.FindGotoScope(context, arg.Value);
             if (result.IsError)
             {
                 return Helpers.Error(result.Error);

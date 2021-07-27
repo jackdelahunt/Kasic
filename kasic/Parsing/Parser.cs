@@ -36,14 +36,10 @@ namespace kasic.Parsing
                 var foundCommand = registerResult.Value;
                 
                 // Fill any references in the token args and store them as their base type
-                var builtArgumentsResult = BuildArguments(context, token.Args, foundCommand.CommandSettings.ArgumentList);
-                if (builtArgumentsResult.IsError)
-                {
-                    return Helpers.Error(builtArgumentsResult.Error);
-                }
+                var builtArgs = BuildArguments(token.Args);
                 
                 // Build arg object from built arguments
-                var argumentResult = Arguments.New(context, builtArgumentsResult.Value, foundCommand.CommandSettings.ArgumentList);
+                var argumentResult = Arguments.New(context, builtArgs, foundCommand.CommandSettings.ArgumentList);
                 if (argumentResult.IsError)
                 {
                     return Helpers.Error(argumentResult.Error);
@@ -137,41 +133,16 @@ namespace kasic.Parsing
             return Helpers.Ok();
         }
 
-        private Result<List<object>, KasicError> BuildArguments(Context context, List<string> args, ArgumentList argumentList)
+        private List<object> BuildArguments(List<string> args)
         {
             var returningObject = new List<object>(10);
             // TODO: this assumes the set command is ran on another line meaning if set is ran on this line this fails
             for (int i = 0; i < args.Count; i++)
             {
-                var arg = args[i];
-                if (arg[0].Equals('*'))
-                {
-                    var argumentType = argumentList.argumentTypes[i];
-                    var result = Heap.Reference(context, arg.Substring(1));
-                    if (result.IsError)
-                    {
-                        return Helpers.Error(result.Error);
-                    }
-
-                    var objectAndTypeTuple = result.Value;
-                    if (objectAndTypeTuple.Item2 != argumentType && argumentType != KasicType.ANY)
-                    {
-                        return Helpers.Error(new KasicError
-                        {
-                            Context = context,
-                            Message = $"expected type {argumentType} but got {result.Value.Item2}"
-                        });
-                    }
-        
-                    returningObject.Add(objectAndTypeTuple.Item1);
-                }
-                else
-                {
-                    returningObject.Add(arg);
-                }
+                returningObject.Add(args[i]);
             }
         
-            return Helpers.Ok(returningObject);
+            return returningObject;
         }
     }
 }

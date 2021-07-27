@@ -25,15 +25,21 @@ namespace kasic.Commands
 
         public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
-            var arg = arguments.AsAny(0);
+            var arg = arguments.AsAny(context, 0);
+            if (arg.IsError)
+            {
+                return Helpers.Error(arg.Error);
+            }
+            
             if (flags.Contains("-c"))
             {
-                Logger.Log(arg);
+                Logger.Log(arg.Value);
             }
             else
             {
-                Logger.Log(arg + " ");
+                Logger.Log(arg.Value + " ");
             }
+            
             Logger.Logln("");
             return new ReturnObject(this);
         }

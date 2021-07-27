@@ -26,9 +26,19 @@ namespace kasic.Commands
 
         public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
-            var num1 = arguments.AsNumber(0);
-            var num2 = arguments.AsNumber(1);
-            return new ReturnObject(this, num1 < num2);
+            var num1 = arguments.AsNumber(context, 0);
+            if (num1.IsError)
+            {
+                return Helpers.Error(num1.Error);
+            }
+            
+            var num2 = arguments.AsNumber(context, 1);
+            if (num2.IsError)
+            {
+                return Helpers.Error(num2.Error);
+            }
+            
+            return new ReturnObject(this, num1.Value < num2.Value);
         }
     }
 }

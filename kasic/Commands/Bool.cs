@@ -26,8 +26,13 @@ namespace kasic.Commands
 
         public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
-            var arg = arguments.AsAny(0);
-            var result = Types.ToBool(context, arg);
+            var arg = arguments.AsAny(context, 0);
+            if (arg.IsError)
+            {
+                return Helpers.Error(arg.Error);
+            }
+            
+            var result = Types.ToBool(context, arg.Value);
             if (result.IsError)
             {
                 return Helpers.Error(result.Error);

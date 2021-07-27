@@ -26,12 +26,23 @@ namespace kasic.Commands
 
         public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
-            double total = arguments.AsNumber(0);
-            
+            var totalResult = arguments.AsNumber(context, 0);
+            if (totalResult.IsError)
+            {
+                return Helpers.Error(totalResult.Error);
+            }
+
+            var total = totalResult.Value;
+
             for (int i = 1; i < arguments.Count; i++)
             {
-                var arg = arguments.AsNumber(i);
-                total *= arg;
+                var arg = arguments.AsNumber(context, i);
+                if (arg.IsError)
+                {
+                    return Helpers.Error(arg.Error);
+                }
+                
+                total *= arg.Value;
             }
 
             return new ReturnObject(this, total);
