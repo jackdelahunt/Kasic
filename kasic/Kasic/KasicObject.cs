@@ -8,8 +8,16 @@ namespace kasic.Kasic
     {
         public object Value { get; private set; }
         public KasicType Type;
-        public bool IsDynamic;
+        
+        // if the object is piped into an argument this is false
         public bool IsNative;
+        
+        // if the value for this is stored on the heap
+        public bool IsDynamic;
+        
+        // object id of the heap object
+        public int ObjectId = -1;
+
 
         public KasicObject(object value, KasicType type, bool isDynamic = false, bool isNative = true)
         {
@@ -29,31 +37,44 @@ namespace kasic.Kasic
             if (!IsDynamic)
                 return Value;
 
-            // look for value in heap
-            var heapLookupResult = Heap.Reference(context, GetDynamicValueName());
-            if (heapLookupResult.IsError)
+            if (ObjectId != -1)
             {
-                return Helpers.Error(heapLookupResult.Error);
+                var heapGetByObjectIdResult = Heap.GetByObjectId(context, ObjectId);
+                if (heapGetByObjectIdResult.IsError)
+                {
+                    return Helpers.Error(heapGetByObjectIdResult.Error);
+                }
+
+                return Helpers.Ok(heapGetByObjectIdResult.Value.Data);
+            }
+
+            // look for value in heap
+            var heapGetByNameResult = Heap.GetByName(context, GetDynamicValueName());
+            if (heapGetByNameResult.IsError)
+            {
+                return Helpers.Error(heapGetByNameResult.Error);
             }
 
             // match types
-            var (heapData, heapType) = heapLookupResult.Value;
-            if (heapType != Type)
+            var heapObject = heapGetByNameResult.Value;
+            if (!heapObject.Type.Equals(Type))
             {
                 return Helpers.Error(new KasicError
                 {
                     Context = context,
-                    Message = $"Type mismatch, {GetDynamicValueName()} is of type {heapType} but expected {Type}"
+                    Message = $"Type mismatch, {GetDynamicValueName()} is of type {heapObject.Type} but expected {Type}"
                 });
             }
+
+            ObjectId = heapObject.ObjectId;
             
             // return heap value
-            return Helpers.Ok(heapData);
+            return Helpers.Ok(heapObject.Data);
         }
 
         private string GetDynamicValueName()
         {
-            if (IsDynamic && Value is string @string)
+            if (Value is string @string)
                 return @string;
 
             throw new Exception($"{Value} is not a variable");
