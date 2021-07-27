@@ -2,8 +2,8 @@
 
 > loop
 great 1000000 *value | &bool result
+if *result finish
 add *value 1 | &num value
-if *result finish loop
-
+goto loop
 
 > finish

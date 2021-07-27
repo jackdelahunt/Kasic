@@ -15,12 +15,17 @@ namespace kasic
         {
             if (args.Length > 0)
             {
-                Headless(new Context
+                var headlessRunResult = Headless(new Context
                 {
                     Command = null,
                     RuntimeMode = RuntimeMode.HEADLESS,
                     LineNumber = 0,
                 }, args[0]);
+
+                if (headlessRunResult.IsError)
+                {
+                    Logger.LogError(headlessRunResult.Error);
+                }
             }
             else
             {
@@ -31,6 +36,8 @@ namespace kasic
                     LineNumber = 0,
                 });
             }
+            
+            
         }
 
         public static Status<KasicError> Headless(Context context, string filePath)
