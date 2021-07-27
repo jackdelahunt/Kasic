@@ -2,7 +2,7 @@
 
 > loop
 great 1000000 *value | &bool result
-add *value 1 | &num value | print
+add *value 1 | &num value
 if *result finish loop
 
 

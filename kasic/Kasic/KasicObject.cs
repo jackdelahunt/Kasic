@@ -9,8 +9,9 @@ namespace kasic.Kasic
         public object Value { get; private set; }
         public KasicType Type;
         public bool IsDynamic;
+        public bool IsNative;
 
-        public KasicObject(object value, KasicType type, bool isDynamic = false)
+        public KasicObject(object value, KasicType type, bool isDynamic = false, bool isNative = true)
         {
             if (isDynamic && !(value is string))
             { 
@@ -20,6 +21,7 @@ namespace kasic.Kasic
             this.Value = value;
             this.Type = type;
             this.IsDynamic = isDynamic;
+            this.IsNative = isNative;
         }
 
         public Result<object, KasicError> GetValue(Context context)

@@ -32,37 +32,33 @@ namespace kasic
                 });
             }
         }
-        
+
         public static Status<KasicError> Headless(Context context, string filePath)
         {
-            context.Region = KasicRegion.LEXER;
-            var lexerResult = new Lexer().Lex(context, filePath);
-            if (lexerResult.IsError)
+            var controller = new Controller(filePath);
+            var lexingResult = controller.Lex(context);
+            if (lexingResult.IsError)
             {
-                return Helpers.Error(lexerResult.Error);
+                return Helpers.Error(lexingResult.Error);
             }
 
-            var controller = new Controller(lexerResult.Value);
+            var parsingResult = controller.Parse(context, lexingResult.Value);
+            if (parsingResult.IsError)
+            {
+                return Helpers.Error(parsingResult.Error);
+            }
+
 
             while (!controller.IsEOF(context))
             {
-                context.Region = KasicRegion.PARSER;
-                var parser = new Parser(controller.GetLine(context));
-                var parserResult = parser.Parse(context);
-                if (parserResult.IsError)
-                {
-                    return Helpers.Error(parserResult.Error);
-                }
-
                 context.Region = KasicRegion.RUNTIME;
-                var runtime = new Runtime(parserResult.Value);
+                var runtime = new Runtime(controller.GetLine(context));
                 var runtimeResult = runtime.Run(context);
                 if (runtimeResult.IsError)
                 {
                     return Helpers.Error(runtimeResult.Error);
                 }
             }
-
 
             return Helpers.Ok();
         }
@@ -89,7 +85,7 @@ namespace kasic
             {
                 return Helpers.Error(lexerResult.Error);
             }
-               
+
             context.Region = KasicRegion.PARSER;
             var parser = new Parser(lexerResult.Value[0]);
             var parserResult = parser.Parse(context);

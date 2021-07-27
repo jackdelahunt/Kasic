@@ -131,6 +131,13 @@ namespace kasic.Kasic
         public Status<KasicError> PipeReturn(Context context, IReturnObject returnObject)
         {
             // TODO: make the type check here maybe?
+            if (argumentObjects.Count > 0)
+            {
+                if (!argumentObjects[^1].IsNative)
+                {
+                    argumentObjects.RemoveAt(argumentObjects.Count - 1);
+                }
+            }
             argumentObjects.Add(returnObject.AsKasicObject());
             return Helpers.Ok();
         }

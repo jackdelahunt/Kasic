@@ -48,7 +48,7 @@ namespace kasic.Kasic
 
         public KasicObject AsKasicObject()
         {
-            return new KasicObject(toReturn, command.CommandSettings.ReturnType);
+            return new KasicObject(toReturn, command.CommandSettings.ReturnType, isNative:false);
         }
 
         public override string ToString()
