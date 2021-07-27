@@ -63,5 +63,5 @@ See [here](https://github.com/jackdelahunt/Kasic/tree/main/kasic/Examples/Speed)
 | Rust     | 1         |
 | C++      | <1        |
 
-### Language iterations per second compared 
+### Million iterations per second for each language compared 
 ![Chart](Resources/speed_chart.png)
