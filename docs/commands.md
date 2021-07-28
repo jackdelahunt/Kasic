@@ -32,6 +32,5 @@ arguments:
 flags:
     - name: 'i'
       description: 'ignores the case of the string to be replaced'
-
-description: 'replaces any occurance of the first string with the second within the third' 
+return: string
 ```
