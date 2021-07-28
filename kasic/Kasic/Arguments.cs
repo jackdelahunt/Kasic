@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using kasic.Utils;
 using OperationResult;
@@ -82,12 +83,8 @@ namespace kasic.Kasic
                 return Helpers.Error(result.Error);
             }
 
-            if (result.Value is double @double)
-            {
-                return Helpers.Ok(@double);
-            }
-
-            throw new Exception($"Used as number for non-number value {result.Value.GetType()}");
+            Debug.Assert(result.Value is double);
+            return Helpers.Ok((double) result.Value);
         }
         
         public Result<bool, KasicError> AsBool(Context context, int index)
@@ -98,12 +95,8 @@ namespace kasic.Kasic
                 return Helpers.Error(result.Error);
             }
 
-            if (result.Value is bool @bool)
-            {
-                return Helpers.Ok(@bool);
-            }
-
-            throw new Exception($"Used as bool for non-bool value {result.Value.GetType()}");
+            Debug.Assert(result.Value is bool);
+            return Helpers.Ok((bool) result.Value);
         }
         
         public Result<string, KasicError> AsString(Context context, int index)
@@ -114,12 +107,8 @@ namespace kasic.Kasic
                 return Helpers.Error(result.Error);
             }
 
-            if (result.Value is string @string)
-            {
-                return Helpers.Ok(@string);
-            }
-
-            throw new Exception($"Used as string for non-string value {result.Value.GetType()}");
+            Debug.Assert(result.Value is string);
+            return Helpers.Ok((string) result.Value);
         }
         
         public Result<string, KasicError> AsAny(Context context, int index)
@@ -140,7 +129,8 @@ namespace kasic.Kasic
             {
                 if (!argumentObjects[^1].IsNative)
                 {
-                    argumentObjects.RemoveAt(argumentObjects.Count - 1);
+                    argumentObjects[^1] = returnObject.AsKasicObject();
+                    return;
                 }
             }
             argumentObjects.Add(returnObject.AsKasicObject());

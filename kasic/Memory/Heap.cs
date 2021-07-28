@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using kasic.Commands;
 using kasic.Kasic;
 using kasic.Logging;
@@ -29,18 +30,9 @@ namespace kasic.Memory
         }
 
         public static void Update(Context context, int objectId, object data,
-            KasicType type, out KasicError error)
+            KasicType type, out KasicError? error)
         {
-        
-            if (objectId < 0 || objectId >= heap.Count)
-            {
-                error = new KasicError
-                {
-                    Context = context,
-                    Message = $"ObjectId {objectId} has not yet been allocated on the heap"
-                };
-            }
-            
+            Debug.Assert(objectId >= 0 && heap.Count > objectId, "Object id must be a valid index in the heap");
             var heapObject = heap[objectId];
 
             if (heapObject.Type != type)
@@ -74,18 +66,10 @@ namespace kasic.Memory
             });
         }
         
-        public static Result<HeapObject, KasicError> GetByObjectId(Context context, int id)
+        public static HeapObject GetByObjectId(int id)
         {
-            if (heap.Count > id)
-            {
-                return Helpers.Ok(heap[id]);
-            }
-            
-            return Helpers.Error(new KasicError
-            {
-                Context = context,
-                Message = $"ObjectID:{id} is not set",
-            });
+            Debug.Assert(heap.Count > id && id != -1);
+            return heap[id];
         }
     }
 

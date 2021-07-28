@@ -21,8 +21,9 @@ namespace kasic
         public Result<string, KasicError> Run(Context context)
         {
             IReturnObject lastOut = null;
-            foreach (var token in Tokens)
+            for (int i = 0; i < Tokens.Count; i++)
             {
+                var token = Tokens[i];
                 context.Command = token.Command;
                 
                 if (lastOut != null)

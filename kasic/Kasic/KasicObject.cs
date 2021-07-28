@@ -39,13 +39,8 @@ namespace kasic.Kasic
 
             if (ObjectId != -1)
             {
-                var heapGetByObjectIdResult = Heap.GetByObjectId(context, ObjectId);
-                if (heapGetByObjectIdResult.IsError)
-                {
-                    return Helpers.Error(heapGetByObjectIdResult.Error);
-                }
-
-                return Helpers.Ok(heapGetByObjectIdResult.Value.Data);
+                var heapObjectById = Heap.GetByObjectId(ObjectId);
+                return Helpers.Ok(heapObjectById.Data);
             }
 
             // look for value in heap

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using kasic.Commands;
 using kasic.Utils;
@@ -14,32 +15,29 @@ namespace kasic.Kasic
         
         public ReturnObject(Command command)
         {
+            Debug.Assert(command.CommandSettings.ReturnType == KasicType.VOID);
             this.command = command;
-            switch (command.CommandSettings.ReturnType)
-            {
-                case KasicType.VOID:
-                    this.toReturn = null;
-                    break;
-                default:
-                    Panic(toReturn); break;
-            }
         }
 
-        public ReturnObject(Command command, object toReturn)
+        public ReturnObject(Command command, double num)
         {
+            Debug.Assert(command.CommandSettings.ReturnType == KasicType.NUMBER);
             this.command = command;
-
-            if (toReturn is double)
-            {
-                if (command.CommandSettings.ReturnType != KasicType.NUMBER)
-                    Panic(toReturn);
-            } else if (toReturn is bool)
-            {
-                if (command.CommandSettings.ReturnType != KasicType.BOOL)
-                    Panic(toReturn);
-            }
-
-            this.toReturn = toReturn;
+            this.toReturn = num;
+        }
+        
+        public ReturnObject(Command command, bool boolean)
+        {
+            Debug.Assert(command.CommandSettings.ReturnType == KasicType.BOOL);
+            this.command = command;
+            this.toReturn = boolean;
+        }
+        
+        public ReturnObject(Command command, string str)
+        {
+            Debug.Assert(command.CommandSettings.ReturnType == KasicType.STRING);
+            this.command = command;
+            this.toReturn = str;
         }
 
         public KasicObject AsKasicObject()
@@ -50,11 +48,6 @@ namespace kasic.Kasic
         public override string ToString()
         {
             return toReturn == null ? "" : toReturn.ToString();
-        }
-        
-        private void  Panic(object toReturn)
-        {
-            throw new ArgumentException($"The value {toReturn} does not match {command.CommandSettings.ReturnType}");
         }
     }
 }

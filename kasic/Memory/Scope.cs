@@ -24,13 +24,8 @@ namespace kasic.Memory
 
         public static Result<int, KasicError> GetScopeById(Context context, int id)
         {
-            var heapLookupResult = Heap.GetByObjectId(context, id);
-            if (heapLookupResult.IsError)
-            {
-                return Helpers.Error(heapLookupResult.Error);
-            }
-
-            if (heapLookupResult.Value.Data is int @int)
+            var heapObject = Heap.GetByObjectId(id);
+            if (heapObject.Data is int @int)
             {
                 return Helpers.Ok(@int);
             }
@@ -38,7 +33,7 @@ namespace kasic.Memory
             return Helpers.Error(new KasicError
             {
                 Context = context,
-                Message = $"Object with id {heapLookupResult.Value.ObjectId} cannot be used as a goto scope"
+                Message = $"Object with id {heapObject.ObjectId} cannot be used as a goto scope"
             });
         }
     }
