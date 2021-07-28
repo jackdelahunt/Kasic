@@ -66,11 +66,11 @@ namespace kasic.Commands
             }
 
             // object is linked to the heap so update the value stored
-            var heapUpdateResult = Heap.Update(context, nameArgKasicObject.ObjectId, value.Value,
-                KasicType.BOOL);
-            if (heapUpdateResult.IsError)
+            Heap.Update(context, nameArgKasicObject.ObjectId, value.Value,
+                KasicType.BOOL, out var error);
+            if (error != null)
             {
-                return Helpers.Error(heapUpdateResult.Error);
+                return Helpers.Error(error);
             }
             return new ReturnObject(this, value.Value);
         }

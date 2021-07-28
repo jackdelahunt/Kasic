@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using kasic.Commands;
@@ -27,33 +28,33 @@ namespace kasic.Memory
             return Helpers.Ok(assignedObjectId);
         }
 
-        public static Status<KasicError> Update(Context context, int objectId, object data,
-            KasicType type)
+        public static void Update(Context context, int objectId, object data,
+            KasicType type, out KasicError error)
         {
         
             if (objectId < 0 || objectId >= heap.Count)
             {
-                return Helpers.Error(new KasicError
+                error = new KasicError
                 {
                     Context = context,
                     Message = $"ObjectId {objectId} has not yet been allocated on the heap"
-                });
+                };
             }
             
             var heapObject = heap[objectId];
 
             if (heapObject.Type != type)
             {
-                return Helpers.Error(new KasicError
+                error = new KasicError
                 {
                     Context = context,
                     Message = $"{type} does not match the type on the heap {heapObject.Type}"
-                });
+                };
             }
             
             heapObject.Data = data;
             heap[objectId] = heapObject;
-            return Helpers.Ok();
+            error = null;
         }
         
         public static Result<HeapObject, KasicError> GetByName(Context context, string name)
