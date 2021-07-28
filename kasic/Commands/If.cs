@@ -35,42 +35,76 @@ namespace kasic.Commands
                 return Helpers.Error(condition.Error);
             }
             
-            var ifResult = arguments.AsString(context, 1);
-            if (ifResult.IsError)
+            var ifResultName = arguments.AsString(context, 1);
+            if (ifResultName.IsError)
             {
-                return Helpers.Error(ifResult.Error);
+                return Helpers.Error(ifResultName.Error);
             }
 
             if (condition.Value)
             {
-                var ifGotoResult = Scope.FindGotoScope(context, ifResult.Value);
-                if (ifGotoResult.IsError)
+                var ifArgumentKasicObject = arguments.GetKasicObject(1);
+                // if kasic object has not been linked to the heap yet
+                if (ifArgumentKasicObject.ObjectId < 0)
                 {
-                    return Helpers.Error(ifGotoResult.Error);
+                    // find value on the heap
+                    var ifFindGotoScopeResult =
+                        Scope.FindGotoScopeObjectId(context, ifResultName.Value);
+                    if (ifFindGotoScopeResult.IsError)
+                    {
+                        return Helpers.Error(ifFindGotoScopeResult.Error);
+                    }
+
+                    // link object id with the heap
+                    ifArgumentKasicObject.ObjectId = ifFindGotoScopeResult.Value;
+                }
+
+                // change line number based on scope
+                var ifFindByIdResult = Scope.GetScopeById(context, ifArgumentKasicObject.ObjectId);
+                if (ifFindByIdResult.IsError)
+                {
+                    return Helpers.Error(ifFindByIdResult.Error);
                 }
                 
-                context.LineNumber = ifGotoResult.Value;
-            }
-            else
-            {
-                if (arguments.Count > 2)
-                {
-                    var elseResult = arguments.AsString(context, 2);
-                    if (elseResult.IsError)
-                    {
-                        return Helpers.Error(elseResult.Error);
-                    }
-                    
-                    var elseGotoResult = Scope.FindGotoScope(context, elseResult.Value);
-                    if (elseGotoResult.IsError)
-                    {
-                        return Helpers.Error(elseGotoResult.Error);
-                    }
-                
-                    context.LineNumber = elseGotoResult.Value;
-                }
+                context.LineNumber = ifFindByIdResult.Value;
+                return new ReturnObject(this);
             }
 
+            if (arguments.Count > 2)
+            {
+                var elseResultName = arguments.AsString(context, 2);
+                if (elseResultName.IsError)
+                {
+                    return Helpers.Error(ifResultName.Error);
+                }
+                var elseArgumentKasicObject = arguments.GetKasicObject(2);
+                
+                // if kasic object has not been linked to the heap yet
+                if (elseArgumentKasicObject.ObjectId < 0)
+                {
+                    // find value on the heap
+                    var elseFindGotoScopeResult =
+                        Scope.FindGotoScopeObjectId(context, ifResultName.Value);
+                    if (elseFindGotoScopeResult.IsError)
+                    {
+                        return Helpers.Error(elseFindGotoScopeResult.Error);
+                    }
+                    
+                    // link object id with the heap
+                    elseArgumentKasicObject.ObjectId = elseFindGotoScopeResult.Value;
+                }
+
+                // change line number based on scope
+                var elseFindByIdResult = Scope.GetScopeById(context, elseArgumentKasicObject.ObjectId);
+                if (elseFindByIdResult.IsError)
+                {
+                    return Helpers.Error(elseFindByIdResult.Error);
+                }
+                
+                context.LineNumber = elseFindByIdResult.Value;
+                return new ReturnObject(this);
+            }
+            
             return new ReturnObject(this);
         }
     }

@@ -5,7 +5,6 @@ using kasic.Lexing;
 using kasic.Logging;
 using kasic.Parsing;
 using OperationResult;
-using kasic.Files;
 
 namespace kasic
 {

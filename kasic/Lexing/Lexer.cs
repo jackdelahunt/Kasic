@@ -44,7 +44,7 @@ namespace kasic.Lexing
                         break;
                     case '>': 
                         var scopeName = line.Substring(1).Trim().Split(" ")[0];
-                        Scope.RegisterGotoScope(scopeName, i); 
+                        Scope.RegisterGotoScope(context, scopeName, i); 
                         listOfCommandTokenLists.Add(null);
                         break;
                     default:

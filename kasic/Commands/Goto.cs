@@ -31,14 +31,30 @@ namespace kasic.Commands
             {
                 return Helpers.Error(arg.Error);
             }
-            
-            var result = Scope.FindGotoScope(context, arg.Value);
-            if (result.IsError)
+
+            var argKasicObject = arguments.GetKasicObject(0);
+            // if the object id is not linked to the heap then link
+            if (argKasicObject.ObjectId < 0)
             {
-                return Helpers.Error(result.Error);
+                var result = Scope.FindGotoScopeObjectId(context, arg.Value);
+                if (result.IsError)
+                {
+                    return Helpers.Error(result.Error);
+                }
+
+                argKasicObject.ObjectId = result.Value;
+            }
+            
+            // once linked get the data on the heap
+            var findByIdResult = Scope.GetScopeById(context, argKasicObject.ObjectId);
+            if (findByIdResult.IsError)
+            {
+                return Helpers.Error(findByIdResult.Error);
             }
 
-            context.LineNumber = result.Value;
+            context.LineNumber = findByIdResult.Value;
+
+
             return new ReturnObject(this);
         }
     }

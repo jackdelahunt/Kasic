@@ -6,26 +6,39 @@ namespace kasic.Memory
 {
     public static class Scope
     {
-        private static Dictionary<string, int> scope = new Dictionary<string, int>();
-
-        public static void RegisterGotoScope(string name, int line)
+        public static Result<int, KasicError> RegisterGotoScope(Context context, string name, int line)
         {
-            scope.Add(name, line);
+            return Heap.Push(context, name, line, KasicType.NUMBER);
         }
         
-        public static Result<int, KasicError> FindGotoScope(Context context, string name)
+        public static Result<int, KasicError> FindGotoScopeObjectId(Context context, string name)
         {
-            bool exists = scope.TryGetValue(name, out var line);
-
-            if (exists)
+            var heapResult = Heap.GetByName(context, name);
+            if (heapResult.IsError)
             {
-                return Helpers.Ok(line);
+                return Helpers.Error(heapResult.Error);
+            }
+
+            return Helpers.Ok(heapResult.Value.ObjectId);
+        }
+
+        public static Result<int, KasicError> GetScopeById(Context context, int id)
+        {
+            var heapLookupResult = Heap.GetByObjectId(context, id);
+            if (heapLookupResult.IsError)
+            {
+                return Helpers.Error(heapLookupResult.Error);
+            }
+
+            if (heapLookupResult.Value.Data is int @int)
+            {
+                return Helpers.Ok(@int);
             }
 
             return Helpers.Error(new KasicError
             {
                 Context = context,
-                Message = $"Cannot find goto scope with name {name}"
+                Message = $"Object with id {heapLookupResult.Value.ObjectId} cannot be used as a goto scope"
             });
         }
     }
