@@ -27,7 +27,7 @@ namespace kasic
                 
                 if (lastOut != null)
                 {
-                    token.Arguments.PipeReturn(context, lastOut);
+                    token.Arguments.PipeReturn(lastOut);
                 }
 
                 var result = token.Command.Run(context, token.Arguments, token.Flags);

@@ -133,7 +133,7 @@ namespace kasic.Kasic
             return Helpers.Ok(result.Value.ToString());
         }
 
-        public Status<KasicError> PipeReturn(Context context, IReturnObject returnObject)
+        public void PipeReturn(IReturnObject returnObject)
         {
             // TODO: make the type check here maybe?
             if (argumentObjects.Count > 0)
@@ -144,7 +144,6 @@ namespace kasic.Kasic
                 }
             }
             argumentObjects.Add(returnObject.AsKasicObject());
-            return Helpers.Ok();
         }
 
         private bool IsFieldDynamic(object value, out string? name)
