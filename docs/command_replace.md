@@ -15,14 +15,14 @@ replace -[i] [string, string, string]
 name: 'replace'
 min: 3
 max: 3
+flags:
+    - name: 'i'
+      description: 'ignores the case of the string to be replaced'
 arguments:
     - string
     - string
     - string
-flags:
-    - name: 'i'
-      description: 'ignores the case of the string to be replaced'
-return: string 
+return: string
 ```
 ---
 ## Example 
