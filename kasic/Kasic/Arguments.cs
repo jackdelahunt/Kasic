@@ -68,6 +68,11 @@ namespace kasic.Kasic
             }
             return arg;
         }
+        
+        public KasicObject GetKasicObject(int index)
+        {
+            return argumentObjects[index];
+        } 
 
         public Result<double, KasicError> AsNumber(Context context, int index)
         {

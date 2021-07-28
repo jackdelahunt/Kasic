@@ -38,8 +38,41 @@ namespace kasic.Commands
             {
                 return Helpers.Error(value.Error);
             }
+
+            var nameArgKasicObject = arguments.GetKasicObject(0);
             
-            Heap.Push(name.Value, value.Value, KasicType.NUMBER);
+            // if this arg object has not been linked to a value on the heap yet
+            if (nameArgKasicObject.ObjectId < 0)
+            {
+                // look for value based on name
+                var getByNameResult = Heap.GetByName(context, name.Value);
+                if (getByNameResult.IsSuccess)
+                {
+                    // link object to heap, then continue to update
+                    nameArgKasicObject.ObjectId = getByNameResult.Value.ObjectId;
+                }
+                else
+                {
+                    // if name is not on the heap then push to the heap
+                    var pushResult = Heap.Push(context, name.Value, value.Value, KasicType.NUMBER);
+                    if (pushResult.IsError)
+                    {
+                        return Helpers.Error(pushResult.Error);
+                    }
+
+                    // update id to reflect we have data on the heap
+                    nameArgKasicObject.ObjectId = pushResult.Value;
+                    return new ReturnObject(this, value.Value);
+                }
+            }
+
+            // object is linked to the heap so update the value stored
+            var heapUpdateResult = Heap.Update(context, nameArgKasicObject.ObjectId, value.Value,
+                KasicType.NUMBER);
+            if (heapUpdateResult.IsError)
+            {
+                return Helpers.Error(heapUpdateResult.Error);
+            }
             return new ReturnObject(this, value.Value);
         }
     }

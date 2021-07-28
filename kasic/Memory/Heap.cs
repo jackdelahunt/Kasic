@@ -13,26 +13,46 @@ namespace kasic.Memory
         // private static Dictionary<string, Tuple<object, KasicType>> heap = new Dictionary<string, Tuple<object, KasicType>>();
         private static List<HeapObject> heap = new List<HeapObject>();
 
-        public static Status<KasicError> Push(string name, object data, KasicType type)
+        public static Result<int, KasicError> Push(Context context, string name, object data, KasicType type)
         {
-            for (int i = 0; i < heap.Count; i++)
-            {
-                var currentObject = heap[i];
-                if (currentObject.Name.Equals(name))
-                {
-                    currentObject.Data = data;
-                    heap[i] = currentObject;
-                    return Helpers.Ok();
-                }
-            }
-            
+            int assignedObjectId = heap.Count;
             heap.Add(new HeapObject
             {
                 Data = data,
                 Name = name,
                 Type = type,
-                ObjectId = heap.Count, // count before the data is added
+                ObjectId = assignedObjectId, // count before the data is added
             });
+            
+            return Helpers.Ok(assignedObjectId);
+        }
+
+        public static Status<KasicError> Update(Context context, int objectId, object data,
+            KasicType type)
+        {
+        
+            if (objectId < 0 || objectId >= heap.Count)
+            {
+                return Helpers.Error(new KasicError
+                {
+                    Context = context,
+                    Message = $"ObjectId {objectId} has not yet been allocated on the heap"
+                });
+            }
+            
+            var heapObject = heap[objectId];
+
+            if (heapObject.Type != type)
+            {
+                return Helpers.Error(new KasicError
+                {
+                    Context = context,
+                    Message = $"{type} does not match the type on the heap {heapObject.Type}"
+                });
+            }
+            
+            heapObject.Data = data;
+            heap[objectId] = heapObject;
             return Helpers.Ok();
         }
         
