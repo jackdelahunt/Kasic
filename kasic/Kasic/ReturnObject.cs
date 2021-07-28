@@ -28,22 +28,18 @@ namespace kasic.Kasic
         public ReturnObject(Command command, object toReturn)
         {
             this.command = command;
-            switch (Type.GetTypeCode(toReturn.GetType()))
+
+            if (toReturn is double)
             {
-                case TypeCode.Double:
-                    if (command.CommandSettings.ReturnType != KasicType.NUMBER)
-                        Panic(toReturn);
-                    this.toReturn = toReturn;
-                    break;
-                case TypeCode.Boolean:
-                    if (command.CommandSettings.ReturnType != KasicType.BOOL)
-                        Panic(toReturn);
-                    this.toReturn = toReturn;
-                    break;
-                default: // string
-                    this.toReturn = toReturn;
-                    break;
+                if (command.CommandSettings.ReturnType != KasicType.NUMBER)
+                    Panic(toReturn);
+            } else if (toReturn is bool)
+            {
+                if (command.CommandSettings.ReturnType != KasicType.BOOL)
+                    Panic(toReturn);
             }
+
+            this.toReturn = toReturn;
         }
 
         public KasicObject AsKasicObject()
