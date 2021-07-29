@@ -12,13 +12,13 @@ Everytime a pipe is used the result of that command is added as the last arguemt
 
 When counting the number of arguments for a command piped arguments are included meaning using a command like `mult` with one argument would normally return an error but once an argument is piped the command executes as normal.
 ```
-                           add 100 10 | mult 2
-                                |         |
-                               110  ->  mult 2
-                                          |
-                                      mult 2 110
-                                          |
-                                         220
+                             add 100 10 | mult 2
+                                  |         |
+                                 110  ->  mult 2
+                                            |
+                                        mult 2 110
+                                            |
+                                           220
 ```
 ---
 ## Example
