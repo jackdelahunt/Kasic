@@ -14,20 +14,30 @@ namespace kasic.Commands
         static CommandRegister()
         {
             commands = new Dictionary<string, Command>();
-            RegisterCommand(new Add());
-            RegisterCommand(new Mult());
+            // Types
             RegisterCommand(new Num());
             RegisterCommand(new NumRef());
             RegisterCommand(new String());
             RegisterCommand(new StringRef());
             RegisterCommand(new Bool());
             RegisterCommand(new BoolRef());
+            
+            // System commands
             RegisterCommand(new Clear());
             RegisterCommand(new Exit());
-            RegisterCommand(new Replace());
             RegisterCommand(new Print());
+
+            // control flow
             RegisterCommand(new Goto());
             RegisterCommand(new If());
+            
+            // string
+            RegisterCommand(new Replace());
+            
+            // numeric operations
+            RegisterCommand(new Add());
+            RegisterCommand(new Mult());
+            RegisterCommand(new Divide());
             
             // Boolean expressions
             RegisterCommand(new Greater());
