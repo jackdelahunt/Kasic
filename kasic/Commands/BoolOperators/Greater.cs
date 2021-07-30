@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using kasic.Kasic;
-using kasic.Logging;
-using kasic.Utils;
 using OperationResult;
 
-namespace kasic.Commands
+namespace kasic.Commands.BoolOperators
 {
     public class Greater : Command
     {

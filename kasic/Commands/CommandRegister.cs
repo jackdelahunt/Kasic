@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using kasic.Commands.BoolOperators;
 using kasic.Kasic;
 using kasic.Logging;
 using OperationResult;
@@ -27,7 +28,13 @@ namespace kasic.Commands
             RegisterCommand(new Print());
             RegisterCommand(new Goto());
             RegisterCommand(new If());
+            
+            // Boolean expressions
             RegisterCommand(new Greater());
+            RegisterCommand(new Less());
+            RegisterCommand(new And());
+            RegisterCommand(new Not());
+            RegisterCommand(new Or());
         }
         
         public static Result<Command, KasicError> FindCommand(Context context, string name)
