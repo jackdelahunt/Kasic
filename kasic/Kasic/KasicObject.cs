@@ -52,7 +52,7 @@ namespace kasic.Kasic
 
             // match types
             var heapObject = heapGetByNameResult.Value;
-            if (!heapObject.Type.Equals(Type))
+            if (Type != KasicType.ANY && !heapObject.Type.Equals(Type))
             {
                 return Helpers.Error(new KasicError
                 {
