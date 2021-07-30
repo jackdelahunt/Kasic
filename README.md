@@ -42,12 +42,23 @@ The number is: 0.02
 The number is: 0.03
 ...
 ```
+## Build
+
+Prerequisites
+- [.NET 5.0](https://dotnet.microsoft.com/download)
+```bash
+git clone git@github.com:jackdelahunt/Kasic.git
+
+cd Kasic/kasic
+
+dotnet run
+```
 ## Speed Comparision
 See [here](https://github.com/jackdelahunt/Kasic/tree/main/kasic/Examples/Speed) for the code for each language.
 
 
-### Kasic
-|                | Speed(ms) |
+
+| Kasic          | Speed(ms) |
 | -------------- | --------- |
 | 2021-07-24     | 4820      |
 | 2021-07-25     | 3560      |
