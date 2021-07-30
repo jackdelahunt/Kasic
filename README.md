@@ -19,8 +19,8 @@ See the [examples](https://github.com/jackdelahunt/Kasic/tree/main/kasic/Example
 
 ### Type inference
 ```bash
-num number 10
-string *number | replace 1 2 | num number
+&num number 10
+string *number | replace 1 2 | num | &num number
 print *number
 ```
 ```bash
@@ -28,18 +28,18 @@ print *number
 ```
 ### Loop iteration
 ```bash
-num number 0
-string prompt "The number is:"
+&num number 0
+&string prompt "The number is:"
 
 > loop
 print *prompt *number
-add *number 0.01 | num number
+add *number 0.01 | &num number
 goto loop
 ```
 ```bash
-0.01
-0.02
-0.03
+The number is: 0.01
+The number is: 0.02
+The number is: 0.03
 ...
 ```
 ## Speed Comparision
