@@ -16,9 +16,11 @@ namespace kasic.Commands
             CommandSettings = new CommandSettings()
             {
                 MinArgs = 2,
-                MaxArgs = 2,
+                MaxArgs = 4,
                 ArgumentList = new ArgumentList(new List<KasicType>()
                 {
+                    KasicType.NUMBER,
+                    KasicType.NUMBER,
                     KasicType.NUMBER,
                     KasicType.NUMBER
                 }),

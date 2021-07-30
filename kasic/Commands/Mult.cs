@@ -14,9 +14,11 @@ namespace kasic.Commands
             CommandSettings = new CommandSettings()
             {
                 MinArgs = 2,
-                MaxArgs = UInt32.MaxValue,
+                MaxArgs = 4,
                 ArgumentList = new ArgumentList(new List<KasicType>()
                 {
+                    KasicType.NUMBER,
+                    KasicType.NUMBER,
                     KasicType.NUMBER,
                     KasicType.NUMBER
                 }),
