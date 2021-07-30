@@ -5,7 +5,7 @@ parent: Commands
 ---
 
 # Greater
-The greater command is used to determine if a given numbe is greater then another
+The greater command is used to determine if a given number is greater then another
 ```
 great [number, number]
 ```
