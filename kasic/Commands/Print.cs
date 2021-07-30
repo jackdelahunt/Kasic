@@ -17,6 +17,9 @@ namespace kasic.Commands
                 MaxArgs = UInt32.MaxValue,
                 ArgumentList = new ArgumentList(new List<KasicType>()
                 {
+                    KasicType.ANY,
+                    KasicType.ANY,
+                    KasicType.ANY,
                     KasicType.ANY
                 }),
                 ReturnType = KasicType.VOID,
@@ -25,21 +28,24 @@ namespace kasic.Commands
 
         public override Result<IReturnObject, KasicError> Run(Context context, Arguments arguments, List<string> flags)
         {
-            var arg = arguments.AsAny(context, 0);
-            if (arg.IsError)
+            for (int i = 0; i < arguments.Count; i++)
             {
-                return Helpers.Error(arg.Error);
+                var arg = arguments.AsAny(context, i);
+                if (arg.IsError)
+                {
+                    return Helpers.Error(arg.Error);
+                }    
+                
+                if (flags.Contains("-c"))
+                {
+                    Logger.Log(arg.Value);
+                }
+                else
+                {
+                    Logger.Log(arg.Value + " ");
+                }
             }
-            
-            if (flags.Contains("-c"))
-            {
-                Logger.Log(arg.Value);
-            }
-            else
-            {
-                Logger.Log(arg.Value + " ");
-            }
-            
+
             Logger.Logln("");
             return new ReturnObject(this);
         }
