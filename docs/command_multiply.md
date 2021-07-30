@@ -4,7 +4,7 @@ slug: /commands/multiply
 parent: Commands
 ---
 
-# Replace
+# Multiply  
 The multiply command returns the product of the numbers passed
 ```
 mult [number, number, number, number]

@@ -13,7 +13,7 @@ Kasic attempts to replicate some functionality of comman command line features. 
 
 Not only does Kasic replicate commands but also piping(`|`). The pipe allows commands to pass it's results to the next. Learning this functionality is key to using Kasic, you can learn more about it [here](https://jackdelahunt.github.io/Kasic/pipes.html).
 
-Even though Kasic attempts to replicate the feel of a shell in a programming language it also attempts to add features. One of these features is `scopes`. Scopes are anotations for the programmer to use to group the functionality of commands together. Mastering how scopes work and how to use them can greatly improve the usability of Kasic. Read more about how to define and use them [here]().
+Even though Kasic attempts to replicate the feel of a shell in a programming language it also attempts to add features. One of these features is `scopes`. Scopes are anotations for the programmer to use to group the functionality of commands together. Mastering how scopes work and how to use them can greatly improve the usability of Kasic. Read more about how to define and use them [here](https://jackdelahunt.github.io/Kasic/scopes.html).
 
 ---
 ## Contributing
