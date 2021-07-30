@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kasic", "kasic\kasic.csproj", "{DAB6204B-FB2E-4384-B709-EBFDCBC847DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E2E", "E2E\E2E.csproj", "{92567FCD-E084-42B6-9A16-A3E4F4F2B2C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{92567FCD-E084-42B6-9A16-A3E4F4F2B2C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

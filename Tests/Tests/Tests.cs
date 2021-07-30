@@ -1,9 +1,8 @@
-using NUnit.Framework;
 using kasic;
 using kasic.Kasic;
-using kasic.Logging;
+using NUnit.Framework;
 
-namespace E2E.Tests
+namespace KasicTests.Tests
 {
     public class E2ETests
     {
