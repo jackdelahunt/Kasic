@@ -32,6 +32,7 @@ namespace kasic.Commands
             RegisterCommand(new If());
             
             // string
+            RegisterCommand(new In());
             RegisterCommand(new Replace());
             
             // numeric operations
