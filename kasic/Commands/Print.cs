@@ -46,7 +46,11 @@ namespace kasic.Commands
                 }
             }
 
-            Logger.Logln("");
+            if(flags.Contains("-l"))
+                Logger.Log("");
+            else
+                Logger.Logln("");
+            
             return new ReturnObject(this);
         }
     }
