@@ -18,6 +18,8 @@ max: 4
 flags:
     - name: 'c'
       description: 'concatenates each argument before printing'
+    - name: 'l'
+      description: 'stops print from appending a new line character to the end of the output'
 arguments:
     - any
     - any
