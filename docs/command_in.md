@@ -1,11 +1,11 @@
 ---
-title: In
+title: Input
 slug: /commands/In
 parent: Commands
 ---
 
-# In
-The in command returns the input from the console. 
+# Input
+The input command returns the input from the console. 
 ```
 in
 ```
