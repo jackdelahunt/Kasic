@@ -34,6 +34,24 @@ namespace kasic.Parsing
                 }
 
                 var foundCommand = registerResult.Value;
+
+                if (i == 0)
+                {
+                    var status = ParseFirst(context, foundCommand, token.Args.Count);
+                    if (status.IsError)
+                    {
+                        return Helpers.Error(status.Error);
+                    }
+                }
+                else
+                {
+                    var lastParserToken = parserTokens[i - 1];
+                    var parseCommandStatus = ParseCommand(context, lastParserToken.Command, foundCommand, token.Args.Count);
+                    if (parseCommandStatus.IsError)
+                    {
+                        return Helpers.Error(parseCommandStatus.Error);
+                    }
+                }
                 
                 // Fill any references in the token args and store them as their base type
                 var builtArgs = BuildArguments(token.Args);
@@ -43,24 +61,6 @@ namespace kasic.Parsing
                 if (argumentResult.IsError)
                 {
                     return Helpers.Error(argumentResult.Error);
-                }
-
-                if (i == 0)
-                {
-                    var status = ParseFirst(context, foundCommand, argumentResult.Value);
-                    if (status.IsError)
-                    {
-                        return Helpers.Error(status.Error);
-                    }
-                }
-                else
-                {
-                    var lastParserToken = parserTokens[i - 1];
-                    var parseCommandStatus = ParseCommand(context, lastParserToken.Command, foundCommand, argumentResult.Value);
-                    if (parseCommandStatus.IsError)
-                    {
-                        return Helpers.Error(parseCommandStatus.Error);
-                    }
                 }
 
                 parserTokens.Add(new ParserToken
@@ -73,11 +73,11 @@ namespace kasic.Parsing
             return parserTokens;
         }
 
-        private Status<KasicError> ParseCommand(Context context, Command before, Command next, Arguments nextCommandArgs)
+        private Status<KasicError> ParseCommand(Context context, Command before, Command next, int nextCommandArgsCount)
         {
             var returningType = before.CommandSettings.ReturnType;
             var firstInputType = next.CommandSettings.ArgumentList.argumentTypes[0];
-            var awaitingInputType = next.CommandSettings.ArgumentList.argumentTypes[nextCommandArgs.Count];
+            var awaitingInputType = next.CommandSettings.ArgumentList.argumentTypes[nextCommandArgsCount];
             
             
             
@@ -101,7 +101,7 @@ namespace kasic.Parsing
                     });
             }
             
-            int nextTotalArgAmount = nextCommandArgs.Count + 1;
+            int nextTotalArgAmount = nextCommandArgsCount + 1;
             if (nextTotalArgAmount > next.CommandSettings.MaxArgs ||
                 nextTotalArgAmount < next.CommandSettings.MinArgs)
             {
@@ -116,9 +116,9 @@ namespace kasic.Parsing
             return Helpers.Ok();
         }
 
-        private Status<KasicError> ParseFirst(Context context, Command command, Arguments commandsArgs)
+        private Status<KasicError> ParseFirst(Context context, Command command, int commandsArgsCount)
         {
-            int argCount = commandsArgs.Count;
+            int argCount = commandsArgsCount;
             if (argCount > command.CommandSettings.MaxArgs ||
                 argCount < command.CommandSettings.MinArgs)
             {
