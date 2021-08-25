@@ -1,6 +1,16 @@
 # Kasic
 Kasic is an interpretuer that trys to replicate the usage of Unix commands but as a programming language.
 
+### Install
+Download latest release from github [here](https://github.com/jackdelahunt/Kasic/releases).
+
+```bash
+unzip kasic.zip && mv kasic ~/ 
+```
+```bash
+export PATH="$HOME/kasic:$PATH"
+```
+
 ### Command Line
 ```bash
 % kasic
