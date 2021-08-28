@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using kasic.Kasic;
 using OperationResult;
 
-namespace kasic.Commands.BoolOperators
+namespace kasic.Commands
 {
     public class Greater : Command
     {
