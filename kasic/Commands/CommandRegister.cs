@@ -33,7 +33,8 @@ namespace kasic.Commands
             
             // string
             RegisterCommand(new Replace());
-            
+            RegisterCommand(new Dump());
+
             // IO
             RegisterCommand(new Write());
             

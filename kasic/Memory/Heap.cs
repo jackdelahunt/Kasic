@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 using kasic.Commands;
 using kasic.Kasic;
 using kasic.Logging;
@@ -81,14 +82,17 @@ namespace kasic.Memory
             Debug.Assert(heap.Count > id && id != -1);
             return heap[id];
         }
+
+        public static List<HeapObject> Dump => heap;
     }
 
+    [Serializable]
     public struct HeapObject
     {
-        public int ObjectId;
-        public string Name;
-        public KasicType Type;
-        public object Data;
-        public bool Const;
+        public int ObjectId { get; set; }
+        public string Name { get; set; }
+        public KasicType Type { get; set; }
+        public object Data { get; set; }
+        public bool Const { get; set; }
     }
 }
