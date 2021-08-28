@@ -26,17 +26,18 @@ namespace kasic.Commands
             RegisterCommand(new Clear());
             RegisterCommand(new Exit());
             RegisterCommand(new Print());
+            RegisterCommand(new In());
 
             // control flow
             RegisterCommand(new Goto());
             RegisterCommand(new If());
             
             // string
-            RegisterCommand(new In());
             RegisterCommand(new Replace());
             
             // numeric operations
             RegisterCommand(new Add());
+            RegisterCommand(new Sub());
             RegisterCommand(new Mult());
             RegisterCommand(new Divide());
             
