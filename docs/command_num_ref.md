@@ -7,7 +7,7 @@ parent: Commands
 # NumRef
 The numRef command is used to create new or change the value of variables with a given name with the passed number. To retrive the data in the variable the derefrence operator(`*`) is used. NumRef also returns the value passed to it.
 ```
-&num [string, number]
+&num -[c] [string, number]
 ```
 ---
 ## Overview
@@ -15,6 +15,9 @@ The numRef command is used to create new or change the value of variables with a
 name: '&num'
 min: 2
 max: 2
+flags:
+    - name: 'c'
+      description: 'variable declared as constant'
 arguments:
     - string
     - number

@@ -7,7 +7,7 @@ parent: Commands
 # StringRef
 The stringRef command is used to create new or change the value of variables with a given name with the passed string. To retrive the data in the variable the derefrence operator(`*`) is used. StringRef also returns the value passed to it.
 ```
-&bool [string, string]
+&bool -[c] [string, string]
 ```
 ---
 ## Overview
@@ -15,6 +15,9 @@ The stringRef command is used to create new or change the value of variables wit
 name: '&string'
 min: 2
 max: 2
+flags:
+    - name: 'c'
+      description: 'variable declared as constant'
 arguments:
     - string
     - string

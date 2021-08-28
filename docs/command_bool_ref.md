@@ -7,7 +7,7 @@ parent: Commands
 # BoolRef
 The boolRef command is used to create new or change the value of variables with a given name with the passed bool. To retrive the data in the variable the derefrence operator(`*`) is used. BoolRef also returns the value passed to it.
 ```
-&bool [string, bool]
+&bool -[c] [string, bool]
 ```
 ---
 ## Overview
@@ -15,6 +15,9 @@ The boolRef command is used to create new or change the value of variables with 
 name: '&bool'
 min: 2
 max: 2
+flags:
+    - name: 'c'
+      description: 'variable declared as constant'
 arguments:
     - string
     - bool
