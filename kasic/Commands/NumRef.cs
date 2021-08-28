@@ -54,7 +54,7 @@ namespace kasic.Commands
                 else
                 {
                     // if name is not on the heap then push to the heap
-                    var pushResult = Heap.Push(context, name.Value, value.Value, KasicType.NUMBER);
+                    var pushResult = Heap.Push(context, name.Value, value.Value, KasicType.NUMBER, flags.Contains("-c"));
                     if (pushResult.IsError)
                     {
                         return Helpers.Error(pushResult.Error);
@@ -67,11 +67,10 @@ namespace kasic.Commands
             }
 
             // object is linked to the heap so update the value stored
-            Heap.Update(context, nameArgKasicObject.ObjectId, value.Value,
-                KasicType.NUMBER, out var error);
-            if (error != null)
+            var heapResult = Heap.Update(context, nameArgKasicObject.ObjectId, value.Value, KasicType.NUMBER);
+            if (heapResult.IsError)
             {
-                return Helpers.Error(error);
+                return Helpers.Error(heapResult.Error);
             }
             return new ReturnObject(this, value.Value);
         }

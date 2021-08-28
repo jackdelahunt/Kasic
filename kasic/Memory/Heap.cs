@@ -15,7 +15,7 @@ namespace kasic.Memory
         // private static Dictionary<string, Tuple<object, KasicType>> heap = new Dictionary<string, Tuple<object, KasicType>>();
         private static List<HeapObject> heap = new List<HeapObject>();
 
-        public static Result<int, KasicError> Push(Context context, string name, object data, KasicType type)
+        public static Result<int, KasicError> Push(Context context, string name, object data, KasicType type, bool isConst)
         {
             int assignedObjectId = heap.Count;
             heap.Add(new HeapObject
@@ -24,29 +24,39 @@ namespace kasic.Memory
                 Name = name,
                 Type = type,
                 ObjectId = assignedObjectId, // count before the data is added
+                Const = isConst
             });
             
             return Helpers.Ok(assignedObjectId);
         }
 
-        public static void Update(Context context, int objectId, object data,
-            KasicType type, out KasicError? error)
+        public static Status<KasicError> Update(Context context, int objectId, object data,
+            KasicType type)
         {
             Debug.Assert(objectId >= 0 && heap.Count > objectId, "Object id must be a valid index in the heap");
             var heapObject = heap[objectId];
 
             if (heapObject.Type != type)
             {
-                error = new KasicError
+                return Helpers.Error(new KasicError
                 {
                     Context = context,
                     Message = $"{type} does not match the type on the heap {heapObject.Type}"
-                };
+                });
+            }
+            
+            if (heapObject.Const)
+            {
+                return Helpers.Error(new KasicError
+                {
+                    Context = context,
+                    Message = $"{heapObject.Name} is a const ref"
+                });
             }
             
             heapObject.Data = data;
             heap[objectId] = heapObject;
-            error = null;
+            return Helpers.Ok();
         }
         
         public static Result<HeapObject, KasicError> GetByName(Context context, string name)
@@ -79,5 +89,6 @@ namespace kasic.Memory
         public string Name;
         public KasicType Type;
         public object Data;
+        public bool Const;
     }
 }

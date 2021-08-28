@@ -8,7 +8,7 @@ namespace kasic.Memory
     {
         public static Result<int, KasicError> RegisterGotoScope(Context context, string name, int line)
         {
-            return Heap.Push(context, name, line, KasicType.NUMBER);
+            return Heap.Push(context, name, line, KasicType.NUMBER, false);
         }
         
         public static Result<int, KasicError> FindGotoScopeObjectId(Context context, string name)
