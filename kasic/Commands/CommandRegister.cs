@@ -34,6 +34,9 @@ namespace kasic.Commands
             // string
             RegisterCommand(new Replace());
             
+            // IO
+            RegisterCommand(new Write());
+            
             // numeric operations
             RegisterCommand(new Add());
             RegisterCommand(new Sub());
