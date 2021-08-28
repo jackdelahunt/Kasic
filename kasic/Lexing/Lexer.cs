@@ -11,6 +11,9 @@ namespace kasic.Lexing
     {
         public Result<List<List<CommandToken>>, KasicError> Lex(Context context, string input)
         {
+            if (input.Equals(""))
+                return Helpers.Ok(new List<List<CommandToken>>() { new List<CommandToken>() });
+            
             if (context.RuntimeMode == RuntimeMode.HEADLESS)
                 return LexFile(context, input);
 
