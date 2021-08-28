@@ -7,7 +7,7 @@ parent: Commands
 # Input
 The input command returns the input from the console. 
 ```
-in [any]
+in -[l] [any]
 ```
 ---
 ## Overview
