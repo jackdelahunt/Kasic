@@ -32,6 +32,7 @@ namespace kasic.Commands
             RegisterCommand(new If());
             
             // string
+            RegisterCommand(new Concat());
             RegisterCommand(new Strlen());
             RegisterCommand(new Replace());
             RegisterCommand(new Dump());
